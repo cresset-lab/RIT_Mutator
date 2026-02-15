@@ -1,0 +1,17 @@
+rule "9 - Records last weather update time"
+when
+    Item Weather_Temperature received update
+then
+    postUpdate(Weather_LastUpdate, new DateTimeType ())
+
+end
+
+rule "10 - Set random wifi variations"
+when
+    System started or
+    Time cron "/20 * * * * ?"
+then
+    if (Weather_LastUpdate.state == new DateTimeType ())
+        postUpdate(Wifi_Level, (Math :: random * 4.0).intValue)
+
+end

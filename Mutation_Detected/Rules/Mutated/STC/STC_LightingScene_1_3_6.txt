@@ -1,0 +1,22 @@
+FILE: C:\Users\jason\OneDrive\Documents\TMU\CPS40A\IoT-Mutator-Noura\IoT-Mutator-Noura\Mutation_Output\Rules\Mutated\STC\STC_LightingScene_1_3_6.rules
+------------------------------------------------
+THREATS DETECTED: 0
+SAC: 0
+WAC: 0
+STC: 0
+WTC: 0
+SCC: 0
+WCC: 0
+------------------------------------------------
+UNCOMMENTED ACTION-ITEM DISCREPANCIES: 10 -- (rules, prolog)
+scene_night_ledstrip_kitchen_cabinet_color: (1, 0)
+scene_evening: (1, 0)
+light_ff_kitchen_sink: (1, 0)
+scene_night_store: (1, 0)
+ledstrip_group2_power: (1, 0)
+eveninglights: (1, 0)
+scene_night_ledstrip_kitchen_cabinet_power: (1, 0)
+ledstrip_group2_color: (1, 0)
+ff_kitchen_recessed: (1, 0)
+scene_night_light_ff_kitchen_recessed: (1, 0)
+------------------------------------------------

@@ -1,0 +1,53 @@
+FILE: C:\Users\jason\OneDrive\Documents\TMU\CPS40A\IoT-Mutator-Noura\IoT-Mutator-Noura\Mutation_Output\Rules\Mutated\SCC\SCC_OwnTracks_1_3_6.rules
+------------------------------------------------
+THREATS DETECTED: 1
+SAC: 0
+WAC: 0
+STC: 0
+WTC: 0
+SCC: 1
+WCC: 0
+------------------------------------------------
+UNCOMMENTED ACTION-ITEM DISCREPANCIES: 8 -- (rules, prolog)
+josh_moving: (1, 0)
+mqttjoshbattery: (1, 0)
+joshdistancefromhome: (1, 0)
+mqttjoshaccuracy: (1, 0)
+locationjosh: (1, 0)
+mqttjoshlongitude: (1, 0)
+josh: (1, 0)
+mqttjoshlatitude: (1, 0)
+------------------------------------------------
+1. SCC THREAT DETECTED
+    THREAT PAIR: (r1a5, r2c1)
+
+    RULES:
+        RULE_A:         [r1]: ("5 - Milight_ID1_G1_HubStates")
+        RULE_B:         [r2]: ("4 - Milight_ID1_G1_HUE")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: Item milight_id1_g1_espmilighthub changed 
+        
+        TRIGGERS_B:     [r2t1]: Item milight_id1_g1_hue received command
+
+    GUARDING CONDITIONS:
+        CONDITIONS_A:   [r1c3]: if (smode != "white")
+                    AND [r1c4]: if (smode == "color") 
+
+    CONDITION-ACTION PAIR:
+        ACTION_A:       [r1a5]: milight_id1_g1_hue.postUpdate(shue + "," + ssaturation + "," + slevel) 
+
+        CONDITIONS_B:   [r2c1]: if (milight_id1_g1_hue == shue + "," + ssaturation + "," + slevel) 
+
+    RESULTING ACTION:
+        ACTION_B:       [r2a1]: milight_id1_g1_light.sendCommand('{"state":"ON","level":' + ilevel + ',"hue":' + ihue + ',"saturation":' + isat + '}') 
+
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS ARE CONCURRENTLY ACTIVATED
+    WHILE GUARDING CONDITIONS ARE ENABLED
+    THE CONDITION-ACTION PAIR
+    WILL CAUSE A CHAIN OF ACTION EXECUTIONS.
+
+------------------------------------------------
+

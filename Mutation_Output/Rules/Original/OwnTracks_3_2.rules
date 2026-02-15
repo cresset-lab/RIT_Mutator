@@ -1,0 +1,19 @@
+rule "4 - Daddy's Home"
+when
+        Item phone_Josh changed from OFF to ON
+
+then
+        postUpdate(josh, "Home")
+end
+
+rule "3 - System Start"
+when
+        System started
+then
+        if(phone_Josh.state == ON){
+                postUpdate(josh, "Home")
+        }
+        else if (phone_Josh_Work.state == ON)
+                postUpdate(josh, "Work")
+        else postUpdate(josh, "Away")
+end

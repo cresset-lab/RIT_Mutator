@@ -1,0 +1,18 @@
+rule "4 - Irrigation - update timer"
+when
+    Time cron "0 * * ? * *"
+then
+    if (IrrigationSectionRemainingTime.state as Number > 0)
+        IrrigationSectionRemainingTime.postUpdate((IrrigationSectionRemainingTime.state as Number) - 1)
+
+end
+
+rule "7 - Irrigation - protection timer off, close all valves"
+when
+    Item IrrigationTimerMax changed to OFF
+then
+    logWarn(logName, "Irrigation protection timer expired - close all valves")
+    if (IrrigationSectionRemainingTime.state == (IrrigationSectionRemainingTime.state as Number) - 1)
+        valve.sendCommand(OFF)
+
+end

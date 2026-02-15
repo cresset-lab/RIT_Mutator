@@ -1,0 +1,38 @@
+rule "3 - Irrigation - cascading"
+when
+    Item IrrigationCurrentValve received command
+then
+    val currValveNum = Integer :: parseInt(currValve.name.split("Zone").get(1))
+    logDebug(logName, "Current valve {}, duration {}", currValve.name, currValveMins)
+    val nextValveNum = currValveNum + 1
+    val nextValveName = "IrrigationValveZone" + nextValveNum
+    if (nextValve === null)
+        logDebug(logName, "This is the last valve in the sequence")
+    else logDebug(logName, "Next valve {}", nextValve.name)
+    val valveOpenTime = currValveMins * coefficientFactor
+    logInfo(logName, "Opening {} for {} mins", currValve.name, valveOpenTime)
+    currValve.sendCommand(ON)
+    IrrigationSectionRemainingTime.postUpdate(valveOpenTime.intValue)
+    if (nextValve !== null)
+        {
+            IrrigationCurrentValve.sendCommand(nextValve.name)
+        }
+    else {
+        logInfo(logName, "Irrigation is complete")
+    }
+    Thread :: sleep(500)
+    logInfo(logName, "Closing " + currValve.name)
+    currValve.sendCommand(OFF)
+    irrigationTimer = null
+
+end
+
+rule "5 - Irrigation - all valves closed"
+when
+    Item IrrigationCurrentValve changed
+then
+    logInfo(logName, "All irrigation valves closed")
+    IrrigationCurrentValve.postUpdate(OFF)
+    IrrigationSectionRemainingTime.postUpdate(0)
+
+end

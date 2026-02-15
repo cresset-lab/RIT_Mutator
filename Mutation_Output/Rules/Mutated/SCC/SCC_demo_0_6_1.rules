@@ -1,0 +1,33 @@
+rule "1 - Dimmed Light"
+when
+    Item DimmedLight received command
+then
+    if ((receivedCommand == INCREASE) || (receivedCommand == DECREASE))
+        {
+            var Number percent = 0
+            if (DimmedLight.state instanceof DecimalType)
+                percent = DimmedLight.state as DecimalType
+            if (receivedCommand == INCREASE)
+                percent = percent + 5
+            if (receivedCommand == DECREASE)
+                percent = percent - 5
+            if (percent < 0)
+                percent = 0
+            if (percent > 100)
+                percent = 100
+            postUpdate(DimmedLight, percent);
+        }
+    var Number percent = 0
+
+end
+
+rule "11 - Set random image URLs"
+when
+    Time cron "/10 * * * * ?"
+then
+    val url = urlList.get(random.nextInt(urlList.length))
+    val res = resList.get(random.nextInt(resList.length))
+    if (DimmedLight.state == percent)
+        postUpdate(ImageURL, url + "/" + res)
+
+end

@@ -1,0 +1,39 @@
+FILE: C:\Users\jason\OneDrive\Documents\TMU\CPS40A\IoT-Mutator-Noura\IoT-Mutator-Noura\Mutation_Output\Rules\Mutated\STC\STC_irrigation_1_6_1.rules
+------------------------------------------------
+THREATS DETECTED: 1
+SAC: 0
+WAC: 0
+STC: 1
+WTC: 0
+SCC: 0
+WCC: 0
+------------------------------------------------
+UNCOMMENTED ACTION-ITEM DISCREPANCIES: 4 -- (rules, prolog)
+sumrainnext24h: (1, 0)
+sumrainlast24h: (1, 0)
+irrigationcurrentvalve: (1, 0)
+valve: (1, 0)
+------------------------------------------------
+1. STC THREAT DETECTED
+    THREAT PAIR: (r1a1, r2t1)
+
+    RULES:
+        RULE_A [r1]: ("2 - Irrigation - calculate whether to start watering")
+        RULE_B [r2]: ("7 - Irrigation - protection timer off, close all valves")
+
+    TRIGGER-ACTION PAIR (ACTION_A --> TRIGGER_B):
+        ACTION_A:       [r1a1]: sumrainlast24h.sendCommand((weatherandforecastcurrentrain.sumsince(now.minushours(24), "influxdb") as number).doublevalue)
+        TRIGGER_B:      [r2t1]: Item sumrainlast24h changed
+        
+    RESULTANT TRIGGER CASCADE (TRIGGER_A --> ACTION_B):
+        TRIGGERS_A:     [r1t1]: Time cron 0 * * ? * *
+        ACTION_B:       [r2a1]: valve.sendCommand(off)
+    
+
+    THREAT DESCRIPTION:
+    WHEN INITIAL TRIGGER IS ACTIVATED
+    THE TRIGGER-ACTION PAIR CAUSES 
+    A CHAIN OF ACTION EXECUTIONS.
+
+------------------------------------------------
+

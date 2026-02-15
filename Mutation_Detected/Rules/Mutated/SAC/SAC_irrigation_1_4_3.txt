@@ -1,0 +1,39 @@
+FILE: C:\Users\jason\OneDrive\Documents\TMU\CPS40A\IoT-Mutator-Noura\IoT-Mutator-Noura\Mutation_Output\Rules\Mutated\SAC\SAC_irrigation_1_4_3.rules
+------------------------------------------------
+THREATS DETECTED: 1
+SAC: 1
+WAC: 0
+STC: 0
+WTC: 0
+SCC: 0
+WCC: 0
+------------------------------------------------
+UNCOMMENTED ACTION-ITEM DISCREPANCIES: 4 -- (rules, prolog)
+irrigationcurrentvalve: (1, 0)
+sumrainnext24h: (2, 0)
+irrigationsectionremainingtime: (1, 0)
+sumrainlast24h: (1, 0)
+------------------------------------------------
+1. SAC THREAT DETECTED
+    THREAT PAIR: (r1a2, r2a1)
+    
+    RULES:
+        RULE_A [r1]: ("2 - Irrigation - calculate whether to start watering")
+        RULE_B [r2]: ("5 - Irrigation - all valves closed")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: Time cron 0 * * ? * * 
+        
+        TRIGGERS_B:     [r2t1]: Item groupirrigationvalves changed to off
+    
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r1a2]: sumrainnext24h.sendCommand(groupforecastedrain24sum.state as number)
+        ACTION_B:       [r2a1]: sumrainnext24h.postUpdate(off)
+    
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+

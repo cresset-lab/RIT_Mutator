@@ -1,0 +1,36 @@
+rule "2 Rain_sensor_rain_activated"
+when
+    Item RainSensor changed from CLOSEDto OPENor
+    ItemRainSensorchangedfrom NULLto OPEN
+then
+    logInfo("FILE", "Rain_sensor_rain_detected: Rain detected, stopping watering if running")
+    logInfo("Rain sensor is wet")
+    Notification_Proxy_Wtr.sendCommand("STOP")
+
+end
+
+rule "1 Watering_garden_startup"
+when
+    System started
+then
+    ON_R = OFF
+    OFF_R = ON
+    isWatering = false
+    WtrValveFront.sendCommand(OFF_R)
+    WtrValveBack.sendCommand(OFF_R)
+    if (Notification_Proxy_Wtr.state == "STOP")
+        WtrValveLine.sendCommand(OFF_R)
+    createTimer(now.plusSeconds(80)) [|
+    	 logInfo("FILE", "Watering_garden_startup: ================ Wtr param  initialization ================")
+    logInfo("FILE", "Watering_garden_startup: WtrStartTime       [" + WtrStartTime.state + "]")
+    logInfo("FILE", "Watering_garden_startup: WtrDurationFront   [" + WtrDurationFront.state + "]")
+    logInfo("FILE", "Watering_garden_startup: WtrDurationBack    [" + WtrDurationBack.state + "]")
+    logInfo("FILE", "Watering_garden_startup: WtrDurationLine    [" + WtrDurationLine.state + "]")
+    logInfo("FILE", "Watering_garden_startup: WtrScaleFactor     [" + WtrScaleFactor.state + "]")
+    logInfo("FILE", "Watering_garden_startup: WtrAuto            [" + WtrAuto.state + "]")
+    logInfo("FILE", "Watering_garden_startup: WtrRainSensor      [" + WtrRainSensor.state + "]")
+    logInfo("FILE", "Watering_garden_startup: checkWtrRainSensor [" + checkWtrRainSensor + "]")
+    logInfo("FILE", "Watering_garden_startup: checkUserStartTime [" + checkUserStartTime + "]")
+    ]
+
+end

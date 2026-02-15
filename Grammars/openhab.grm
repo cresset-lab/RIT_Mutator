@@ -1,0 +1,548 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+keys
+%openhab
+     'rule 'var 'val 'Member 'received  'update 'changed  'Item 'midnight 'noon 'is %'command
+      'cron 'System 'started 'start 'level 'Thing 'Channel 'triggered 'from 'to 'newArrayList %'as
+    % 'DecimalType 'DateTimeType 
+end keys
+    
+% May 30 - Adding Items processing
+redefine program
+    [automation]
+    | [items_file]
+end redefine
+
+define automation
+ [opt package_header] [repeat import_declaration]
+[repeat variable_declaration]
+[repeat openhab_rule]
+end define
+
+
+
+% JQ Apr 5, 2024
+% To fix space between method call and argument eg 'Item.postUpdate (value)'
+redefine method_argument
+    [SPOFF] '( [SPON] [list argument] ')   
+end define
+
+
+define openhab_rule
+'rule [rule_id][NL]
+'when [NL]
+    [IN][triggers][EX][NL]
+'then [NL]
+    [IN][script_block][EX] [NL]
+'end [NL][NL]
+end define
+
+define rule_id
+	[stringlit]
+	|[id]
+end define
+
+
+define triggers
+    [trigger] [repeat more_triggers]
+end define
+
+define more_triggers
+	'or [NL][SPON][trigger]
+end define
+
+define trigger
+        % 'Item ItemName 'received 'command Value
+        [trigger_type] [item] [change_type] [SPON][opt value][SPON]
+        % 'Item ItemName 'changed 'from Value1 'to Value
+    |   [trigger_type] [item] [change_type] [SPON][opt from_value] [SPON][opt to_value][SPON] 
+        % 'Time 'cron '0 0 0 0'
+    |   [SPON][trigger_type] [SPON][item] [SPON][value][SPON]
+        % 'System 'started
+    |   [trigger_type] [item]
+
+end define
+
+define trigger_type
+        'Item
+    |   'Time
+    |   'System
+end define
+
+define change_type
+        'changed
+    |   'received 'command
+    |   'received 'update
+end define
+
+define from_value
+    'from [value]
+end define
+
+define to_value
+    'to [value]
+end define
+
+define script_block
+    [repeat declaration_or_statement]
+end define
+
+redefine import_declaration
+        'import [opt 'static] [imported_name] [opt dot_star] [NL][NL]
+    |    [NL]    % observed
+end redefine
+
+%%% Apr 7, JQ - fix extra newline after variable declarations
+redefine declaration
+        [local_variable_declaration]  %[NL]
+    |   [type_declaration] 
+end redefine
+
+redefine statement
+     [action_statement] 
+    | ...
+end redefine
+    
+define action_statement
+        [action_function]
+    |   [action_method]
+end define
+
+define action_method
+        [item] [SPOFF] '. [action_type] '( [value] ')  [opt ';] [SPON][NL]
+end define
+
+define action_function
+        [action_type]  [SPOFF] '( [item], [value] ')  [opt ';]  [SPON][NL]
+end define
+
+define item
+        'cron
+    |   'started
+    |   'is
+    |   [id]
+end define
+
+define action_type
+        postUpdate
+    |   sendCommand
+end define
+
+define value
+        [SPON] [relational_expression]  [SPOFF]
+    |   [SPON] [expression]             [SPOFF]
+end define
+
+
+%(
+% Apr 7, JQ: added [NL] in front of [trigger_condition] instead
+
+
+define trigger_condition
+[Event_based_Triggers]|
+[Time_based_triggers]|
+[System_based_triggers]|
+[Thing_based_triggers]|
+[triggerChannel]
+end define
+
+define Event_based_Triggers
+[item_based_Triggers]|
+[group_based_Triggers]
+end define
+
+define group_based_Triggers
+'Member 'of [id] 'received 'command [opt command] |
+'Member 'of [id] 'received 'update [opt state]   |
+'Member 'of [id] 'changed [SPOFF][opt from_range][opt to_range][SPON]
+end define
+
+define item_based_Triggers
+'Item [id] 'received 'command [opt command]|
+'Item [id] 'received 'update [opt state] |
+'Item [id] 'changed [opt from_range][opt to_range]
+%'Item [id] 'changed [SPOFF][opt from_range][opt to_range][SPON]
+end define
+
+define Time_based_triggers
+'Time 'is 'midnight|
+'Time 'is 'noon|
+'Time 'is [id] [opt timeOnly]|
+'Time 'cron [cron_expression]
+end define
+
+define cron_expression
+%[seconds][minutes][hours][day_of_month][month][day_of_week][opt year]
+[stringlit]
+end define
+
+% Apr 7, JQ
+define System_based_triggers
+	'System 'started | %[NL]|
+	'System 'reached 'start 'level [level]	%[NL]
+end define
+define level
+	00|10|20|30|40|50|70|80|100
+end define
+	
+define Thing_based_triggers
+'Thing [id] 'received 'update [opt status]
+'Thing [id] 'changed [SPOFF][opt from_range][opt to_range][SPON]
+end define
+
+define from_range
+'from [status] 
+end define
+
+define to_range
+'to [status] 
+end define
+
+
+define triggerChannel
+'Channel [stringlit] 'triggered [opt triggerEvent]
+end define
+
+
+%%% Edited May 16 - JQ
+
+
+define command
+[id]|
+[number]
+end define
+
+define state
+[id]|[number]
+end define
+
+define timeOnly
+[id]
+end define
+
+define status
+[id]
+|[number]
+|[literal]
+|[string_literal]
+end define
+
+define triggerEvent
+[id]
+end define
+)%
+
+
+
+redefine package_header
+    [repeat annotation] 'package [package_name] [NL][NL]
+end redefine
+
+redefine method_body
+        [block]  [NL][NL]
+    |   [opt ';]     [NL][NL]
+    |   'default [annotation_value] [opt ';][NL][NL]
+end redefine
+
+redefine do_statement
+    'do
+        [statement]
+    'while '( [condition] ') [opt ';] [NL]
+end redefine
+
+redefine for_init
+        [list expression] [opt ';]
+    |   [local_variable_declaration]
+end redefine
+
+redefine for_expression
+    [opt expression] [opt ';]   
+end redefine
+
+redefine for_update
+    [list expression]
+end redefine
+
+redefine break_statement
+    'break [opt label_name] [opt ';]  [NL]
+end redefine
+
+redefine continue_statement
+    'continue [opt label_name] [opt ';]    [NL]
+end redefine
+
+redefine return_statement
+    'return [opt expression] [opt ';]      [NL]
+end redefine
+
+redefine throw_statement
+    'throw [expression] [opt ';]          [NL]
+end redefine
+
+redefine assert_statement
+    'assert [expression] [opt assert_error_code] [NL]
+end redefine
+
+redefine  equality_op
+    '=== | '!== | ... 
+end redefine
+
+redefine lambda_expression
+    '[| [repeat statement] '] |...
+end redefine
+
+redefine argument
+       ...| [lambda_expression]
+end redefine
+
+%redefine class_instance_creation_expression
+%    ...|'new [class_or_interface_name]
+%end redefine
+
+redefine array_creation_expression
+...| 'newArrayList [opt array_initializer]
+end redefine
+
+%removed April 2nd, MA
+%redefine cast_expression
+%   ...| '( [type_bound] 'as [type_bound] ')   %'. [unary_expression]
+%      | '( [type_bound] 'as [type_bound] ') %'. [lambda_expression]
+%      | [reference] 'as [type_bound]
+%end redefine
+
+redefine primitive_type
+... | 'DecimalType 
+    | 'DateTimeType 
+	
+end redefine
+
+%MA,April 2,2024
+% Additional redefinitions
+redefine if_statement
+    'if '( [condition] ') [NL][IN]
+        [statement]       [EX]
+    [opt else_clause]      
+end redefine
+
+redefine  argument
+        ...
+        | [if_statement]
+end redefine
+
+define asOperator
+    'as | 'as '?
+end define
+
+define asOperator_type
+    [asOperator][primitive_type]
+end define
+
+
+define asExpression
+    [expression] [asOperator_type*]
+end define
+
+%Apr 7, JQ - Helped Fix Type Issue
+%redefine primary
+%...
+%|[asExpression]
+%end redefine
+
+
+
+%removed April 2, MA
+%redefine expression_statement
+%    [expression]%[NL] %[end_of_statement] [NL]
+%end redefine
+
+%Added April 2, MA
+redefine end_of_statement
+        [opt ';] 
+    |   [see '}]
+end redefine
+
+
+
+%%% Original Mar 28 - JQ
+%define openhab_declaration_or_statement
+%	[variable_declaration] %[NL]
+%	|[statement] %[NL]
+%end define
+
+%%% Edited Mar 28 - JQ
+%%% Removed May 16 - JQ
+%define openhab_declaration_or_statement
+%	[declaration_or_statement] %[NL]
+%end define
+
+%%% Added April 2nd
+redefine declaration_or_statement
+    [statement]  
+    |[declaration]
+end redefine
+
+%%% Apr 7, JQ - fix extra newline after variable declarations
+redefine declaration
+        [local_variable_declaration]  %[NL]
+    |   [type_declaration] 
+end redefine
+
+
+%%% Jan 1 - MA
+redefine variable_declaration
+   [repeat modifier] [type_specifier] [variable_declarators] [opt ';] [NL]
+   |[repeat modifier][variable_declarators] [opt ';][NL]
+end redefine
+
+
+define as_type
+	'as 'DecimalType | 'as 'DateTimeType 
+end define
+
+redefine modifier
+	'var | 
+	'val |...
+end redefine
+
+redefine primitive_type
+'Number
+|...
+end redefine
+
+
+%%% Apr 7, JQ - Fixing as type issues
+redefine unary_expression
+    [typecast_expression]
+    | ...
+end redefine
+
+%%% Apr 7, JQ - Fixing as type issues
+define typecast_expression
+    [primary] 'as [type_bound]
+end define
+
+
+%%% Apr 7, JQ
+redefine switch_expression
+    ... | 'switch  [expression]  [switch_block]
+end redefine
+
+%%% May 30, JQ - Fix 'members?' syntax
+redefine component
+    [qmark_id]
+    | ...
+end redefine
+
+%%% May 30, JQ - Fix 'members?' syntax
+define qmark_id
+    [SPOFF] '? [dot_id] [SPON]
+end define
+
+
+
+
+
+
+%%%%%%%%
+% Items File
+
+define items_file
+    [repeat item_or_group_definition]
+end define
+
+define item_or_group_definition
+    [group_definition]  [NL]
+    | [item_definition] [NL]
+end define
+
+define group_definition
+    [group]
+    | [active_group]
+end define
+
+define item_definition
+    [item_type] [item_name] [opt label] [opt icon] [opt groups] [opt tags] [opt binding]
+end define
+
+define item_type
+    'Call
+    | 'Color
+    | 'Contact
+    | 'DateTime
+    | 'Dimmer
+    | 'Image
+    | 'Location
+    | 'Number
+    | 'Player
+    | 'Rollershutter
+    | 'String
+    | 'Switch
+end define
+
+define item_name
+    [id]
+end define
+
+define label
+    [stringlit]
+end define
+
+define icon
+    [SPOFF] '< [id] '> [SPON]
+end define
+
+define groups
+    [SPOFF] '( [repeat id_list] ') [SPON]
+end define
+
+define id_list
+    [id]
+    | [id] ',
+end define
+
+define tags
+    [SPOFF] '[ [repeat string_list] '] [SPON]
+end define
+
+define string_list
+    [stringlit]
+    | [stringlit] ',
+end define
+
+define binding
+    '{ 'channel '= [stringlit] '}
+    | '{ 'synonyms '= [stringlit] '}
+end define
+
+define group
+    'Group [group_name] [opt label] [opt icon] [opt groups] [opt tags] [opt binding]
+end define
+
+define group_name
+    [id]
+end define
+
+define active_group
+    [SPOFF] 'Group ': [item_type] ': [aggregation_function] [SPON] [group_name] [opt label] [opt icon] [opt groups] [opt tags] [opt binding]
+end define
+
+define aggregation_function
+    'EQUALITY
+    | [SPOFF] 'AND '( [item_states] ') [SPON]
+    | [SPOFF] 'OR '( [item_states] ') [SPON]
+    | [SPOFF] 'NAND '( [item_states] ') [SPON]
+    | [SPOFF] 'NOR '( [item_states] ') [SPON]
+    | 'SUM
+    | 'AVG
+    | 'MIN
+    | 'MAX
+    | [SPOFF] 'COUNT '( [expression] ') [SPON]
+    | 'LATEST
+    | 'EARLIEST
+end define
+
+define item_states
+    'ON ', 'OFF
+    | 'OPEN ', 'CLOSED
+end define
+
+% END

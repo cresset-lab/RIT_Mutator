@@ -1,0 +1,44 @@
+rule "3 - System Start"
+when
+    System started
+then
+    if (phone_Josh.state == ON)
+        {
+            postUpdate(josh, "Home")
+        }
+    else if (phone_Josh_Work.state == ON)
+        postUpdate(josh, "Work")
+    else postUpdate(josh, "Away")
+
+end
+
+rule "2 - MqttPostionParseJosh"
+when
+    Item mqttPositionJoshRaw changed
+then
+    val String json = (mqttPositionJoshRaw.state as StringType).toString
+    val String type = transform("JSONPATH", "$._type", json)
+    if (type == "location")
+        {
+            val String lat = transform("JSONPATH", "$.lat", json)
+            val String lon = transform("JSONPATH", "$.lon", json)
+            val String acc = transform("JSONPATH", "$.acc", json)
+            val String batt = transform("JSONPATH", "$.batt", json)
+            if (josh.state == "Work")
+                postUpdate(mqttJoshLatitude, lat)
+            postUpdate(mqttJoshLongitude, lon)
+            locationJosh.postUpdate(new PointType (lat + "," + lon))
+            mqttJoshAccuracy.postUpdate(acc)
+            mqttJoshBattery.postUpdate(batt)
+            joshDistanceFromHome.postUpdate((home.distanceFrom(locationJosh.state)) * 0.000621)
+        }
+    if (josh_moving.state == ON)
+        {
+            if (josh_moving_location.distanceFrom(locationJosh.state) > 300)
+                {
+                    pushover("Josh is on the move")
+                    postUpdate(josh_moving, OFF)
+                }
+        }
+
+end

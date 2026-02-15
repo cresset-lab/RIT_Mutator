@@ -1,0 +1,45 @@
+FILE: C:\Users\jason\OneDrive\Documents\TMU\CPS40A\IoT-Mutator-Noura\IoT-Mutator-Noura\Mutation_Output\Rules\Mutated\WAC\WAC_demo_3_6_2.rules
+------------------------------------------------
+THREATS DETECTED: 1
+SAC: 0
+WAC: 1
+STC: 0
+WTC: 0
+SCC: 0
+WCC: 0
+------------------------------------------------
+UNCOMMENTED ACTION-ITEM DISCREPANCIES: 2 -- (rules, prolog)
+weather_temp_min: (2, 0)
+weather_temp_max: (1, 0)
+------------------------------------------------
+1. WAC THREAT DETECTED
+    THREAT PAIR: (r1a2, r2a1)
+    
+    RULES:
+        RULE_A [r1]: ("8 - Set daily max and min temperature")
+        RULE_B [r2]: ("11 - Set random image URLs")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: Item weather_temperature changed
+                    OR  [r1t2]: Time cron 0 0 0 * * ?
+                    OR  [r1t3]: System started 
+        
+        TRIGGERS_B:     [r2t1]: Time cron /10 * * * * ?
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [r1c1]: if (min !== null)
+                    AND [r1c2]: if (max !== null) 
+        
+        CONDITIONS_B:   [c0]:   no conditions guarding action
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r1a2]: weather_temp_min.postUpdate(min.state)
+        ACTION_B:       [r2a1]: weather_temp_min.postUpdate(url + "/" + res)
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+

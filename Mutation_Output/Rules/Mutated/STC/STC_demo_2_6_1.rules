@@ -1,0 +1,17 @@
+rule "6 - Initialize Location"
+when
+    System started
+then
+    DemoLocation.postUpdate(new PointType ("52.5200066,13.4049540"))
+
+end
+
+rule "11 - Set random image URLs"
+when
+    Item DemoLocation changed
+then
+    val url = urlList.get(random.nextInt(urlList.length))
+    val res = resList.get(random.nextInt(resList.length))
+    postUpdate(ImageURL, url + "/" + res)
+
+end

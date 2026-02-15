@@ -1,0 +1,16 @@
+rule "6 - Josh gets to work"
+when
+    Item phone_Josh_Work received update ON
+then
+    postUpdate(josh, "Work")
+
+end
+
+rule "4 - Daddy's Home"
+when
+    Item phone_Josh changed from OFFto ON
+then
+    if(josh.state=="Work")
+        postUpdate(josh, "Home")
+
+end

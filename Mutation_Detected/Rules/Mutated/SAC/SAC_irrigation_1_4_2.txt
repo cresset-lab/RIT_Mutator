@@ -1,0 +1,61 @@
+FILE: C:\Users\jason\OneDrive\Documents\TMU\CPS40A\IoT-Mutator-Noura\IoT-Mutator-Noura\Mutation_Output\Rules\Mutated\SAC\SAC_irrigation_1_4_2.rules
+------------------------------------------------
+THREATS DETECTED: 2
+SAC: 2
+WAC: 0
+STC: 0
+WTC: 0
+SCC: 0
+WCC: 0
+------------------------------------------------
+UNCOMMENTED ACTION-ITEM DISCREPANCIES: 3 -- (rules, prolog)
+irrigationcurrentvalve: (2, 0)
+sumrainnext24h: (1, 0)
+sumrainlast24h: (2, 0)
+------------------------------------------------
+1. SAC THREAT DETECTED
+    THREAT PAIR: (r1a1, r2a2)
+    
+    RULES:
+        RULE_A [r1]: ("2 - Irrigation - calculate whether to start watering")
+        RULE_B [r2]: ("5 - Irrigation - all valves closed")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: Time cron 0 * * ? * * 
+        
+        TRIGGERS_B:     [r2t1]: Item groupirrigationvalves changed to off
+    
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r1a1]: sumrainlast24h.sendCommand((weatherandforecastcurrentrain.sumsince(now.minushours(24), "influxdb") as number).doublevalue)
+        ACTION_B:       [r2a2]: sumrainlast24h.postUpdate(0)
+    
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+2. SAC THREAT DETECTED
+    THREAT PAIR: (r1a3, r2a1)
+    
+    RULES:
+        RULE_A [r1]: ("2 - Irrigation - calculate whether to start watering")
+        RULE_B [r2]: ("5 - Irrigation - all valves closed")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: Time cron 0 * * ? * * 
+        
+        TRIGGERS_B:     [r2t1]: Item groupirrigationvalves changed to off
+    
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r1a3]: irrigationcurrentvalve.sendCommand(irrigationvalvezone1.name)
+        ACTION_B:       [r2a1]: irrigationcurrentvalve.postUpdate(off)
+    
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+

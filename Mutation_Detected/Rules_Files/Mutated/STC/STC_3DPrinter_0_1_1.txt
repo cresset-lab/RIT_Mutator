@@ -1,0 +1,161 @@
+FILE: C:\Users\jason\OneDrive\Documents\TMU\CPS40A\IoT-Mutator-Noura\IoT-Mutator-Noura\Mutation_Output\Rules_Files\Mutated\STC\STC_3DPrinter_0_1_1.rules
+------------------------------------------------
+THREATS DETECTED: 5
+SAC: 0
+WAC: 0
+STC: 0
+WTC: 5
+SCC: 0
+WCC: 0
+------------------------------------------------
+UNCOMMENTED ACTION-ITEM DISCREPANCIES: 4 -- (rules, prolog)
+octoprintjobprinttimestring: (1, 0)
+octoprintjobprintetastring: (1, 0)
+octoprintjobprintetadatetime: (1, 0)
+octoprintjobprinttimeleftstring: (1, 0)
+------------------------------------------------
+1. WTC THREAT DETECTED
+    THREAT PAIR: (r1a4, r2t1)
+
+    RULES:
+        RULE_A:         [r1]: ("7 Watering_starting/stoping")
+        RULE_B:         [r2]: ("8 Watering_algorithm")
+
+    TRIGGER-ACTION PAIR (ACTION_A --> TRIGGER_B):
+        ACTION_A:       [r1a4]: wtrled.sendCommand(off)
+        TRIGGER_B:      [r2t1]: Item wtrled changed
+
+    OVERLAPPING GUARDING CONDITIONS:
+        CONDITIONS_A:   [c0]:   no conditions guarding action 
+        
+        CONDITIONS_B:   [r2c1]: if (iswatering == false)
+                    AND [r2c4]: if (wtrauto == closed)
+
+    RESULTANT TRIGGER CASCADE (TRIGGER_A --> ACTION_B):
+        TRIGGERS_A:     [r1t1]: Item notification_proxy_wtr received update
+        ACTION_B:       [r2a1]: wtrrainfallforecast.sendCommand(rainfallmm)
+
+    THREAT DESCRIPTION:
+    WHEN INITIAL TRIGGER IS ACTIVATED
+    IF OVERLAPPING SETS OF CONDITIONS ARE CONCURRENTLY ENABLED
+    THE TRIGGER-ACTION PAIR CAUSES A CHAIN OF ACTION EXECUTIONS.
+
+------------------------------------------------
+
+2. WTC THREAT DETECTED
+    THREAT PAIR: (r1a5, r2t1)
+
+    RULES:
+        RULE_A:         [r1]: ("7 Watering_starting/stoping")
+        RULE_B:         [r2]: ("8 Watering_algorithm")
+
+    TRIGGER-ACTION PAIR (ACTION_A --> TRIGGER_B):
+        ACTION_A:       [r1a5]: wtrled.sendCommand(on)
+        TRIGGER_B:      [r2t1]: Item wtrled changed
+
+    OVERLAPPING GUARDING CONDITIONS:
+        CONDITIONS_A:   [r1c8]: if (msg == "START") 
+        
+        CONDITIONS_B:   [r2c1]: if (iswatering == false)
+                    AND [r2c4]: if (wtrauto == closed)
+
+    RESULTANT TRIGGER CASCADE (TRIGGER_A --> ACTION_B):
+        TRIGGERS_A:     [r1t1]: Item notification_proxy_wtr received update
+        ACTION_B:       [r2a1]: wtrrainfallforecast.sendCommand(rainfallmm)
+
+    THREAT DESCRIPTION:
+    WHEN INITIAL TRIGGER IS ACTIVATED
+    IF OVERLAPPING SETS OF CONDITIONS ARE CONCURRENTLY ENABLED
+    THE TRIGGER-ACTION PAIR CAUSES A CHAIN OF ACTION EXECUTIONS.
+
+------------------------------------------------
+
+3. WTC THREAT DETECTED
+    THREAT PAIR: (r1a13, r2t1)
+
+    RULES:
+        RULE_A:         [r1]: ("7 Watering_starting/stoping")
+        RULE_B:         [r2]: ("8 Watering_algorithm")
+
+    TRIGGER-ACTION PAIR (ACTION_A --> TRIGGER_B):
+        ACTION_A:       [r1a13]: wtrled.sendCommand(off)
+        TRIGGER_B:      [r2t1]: Item wtrled changed
+
+    OVERLAPPING GUARDING CONDITIONS:
+        CONDITIONS_A:   [r1c8]: if (msg == "START") 
+        
+        CONDITIONS_B:   [r2c1]: if (iswatering == false)
+                    AND [r2c4]: if (wtrauto == closed)
+
+    RESULTANT TRIGGER CASCADE (TRIGGER_A --> ACTION_B):
+        TRIGGERS_A:     [r1t1]: Item notification_proxy_wtr received update
+        ACTION_B:       [r2a1]: wtrrainfallforecast.sendCommand(rainfallmm)
+
+    THREAT DESCRIPTION:
+    WHEN INITIAL TRIGGER IS ACTIVATED
+    IF OVERLAPPING SETS OF CONDITIONS ARE CONCURRENTLY ENABLED
+    THE TRIGGER-ACTION PAIR CAUSES A CHAIN OF ACTION EXECUTIONS.
+
+------------------------------------------------
+
+4. WTC THREAT DETECTED
+    THREAT PAIR: (r2a3, r1t1)
+
+    RULES:
+        RULE_A:         [r2]: ("8 Watering_algorithm")
+        RULE_B:         [r1]: ("7 Watering_starting/stoping")
+
+    TRIGGER-ACTION PAIR (ACTION_A --> TRIGGER_B):
+        ACTION_A:       [r2a3]: notification_proxy_wtr.sendCommand("START")
+        TRIGGER_B:      [r1t1]: Item notification_proxy_wtr received update
+
+    OVERLAPPING GUARDING CONDITIONS:
+        CONDITIONS_A:   [r2c1]: if (iswatering == false)
+                    AND [r2c4]: if (wtrauto == closed)
+                    AND [r2c5]: if (checkwtrrainsensor == false)
+                    AND [r2c8]: if (rainfallmm > minimumreqrainfall)
+                    AND [r2c12]: if (lastwtrdate.isbefore(now.minusdays(maxnowtrdays)) == 0) 
+        
+        CONDITIONS_B:   [c0]:   no conditions guarding action
+
+    RESULTANT TRIGGER CASCADE (TRIGGER_A --> ACTION_B):
+        TRIGGERS_A:     [r2t1]: Item wtrled changed
+        ACTION_B:       [r1a1]: wtrvalvefront.sendCommand(off_r)
+
+    THREAT DESCRIPTION:
+    WHEN INITIAL TRIGGER IS ACTIVATED
+    IF OVERLAPPING SETS OF CONDITIONS ARE CONCURRENTLY ENABLED
+    THE TRIGGER-ACTION PAIR CAUSES A CHAIN OF ACTION EXECUTIONS.
+
+------------------------------------------------
+
+5. WTC THREAT DETECTED
+    THREAT PAIR: (r2a4, r1t1)
+
+    RULES:
+        RULE_A:         [r2]: ("8 Watering_algorithm")
+        RULE_B:         [r1]: ("7 Watering_starting/stoping")
+
+    TRIGGER-ACTION PAIR (ACTION_A --> TRIGGER_B):
+        ACTION_A:       [r2a4]: notification_proxy_wtr.sendCommand("START")
+        TRIGGER_B:      [r1t1]: Item notification_proxy_wtr received update
+
+    OVERLAPPING GUARDING CONDITIONS:
+        CONDITIONS_A:   [r2c1]: if (iswatering == false)
+                    AND [r2c4]: if (wtrauto == closed)
+                    AND [r2c5]: if (checkwtrrainsensor == false)
+                    AND [r2c10]: if (rainfallmm <= minimumreqrainfall) 
+        
+        CONDITIONS_B:   [c0]:   no conditions guarding action
+
+    RESULTANT TRIGGER CASCADE (TRIGGER_A --> ACTION_B):
+        TRIGGERS_A:     [r2t1]: Item wtrled changed
+        ACTION_B:       [r1a1]: wtrvalvefront.sendCommand(off_r)
+
+    THREAT DESCRIPTION:
+    WHEN INITIAL TRIGGER IS ACTIVATED
+    IF OVERLAPPING SETS OF CONDITIONS ARE CONCURRENTLY ENABLED
+    THE TRIGGER-ACTION PAIR CAUSES A CHAIN OF ACTION EXECUTIONS.
+
+------------------------------------------------
+

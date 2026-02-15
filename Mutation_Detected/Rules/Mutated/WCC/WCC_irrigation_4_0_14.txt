@@ -1,0 +1,54 @@
+FILE: C:\Users\jason\OneDrive\Documents\TMU\CPS40A\IoT-Mutator-Noura\IoT-Mutator-Noura\Mutation_Output\Rules\Mutated\WCC\WCC_irrigation_4_0_14.rules
+------------------------------------------------
+THREATS DETECTED: 1
+SAC: 0
+WAC: 0
+STC: 0
+WTC: 0
+SCC: 0
+WCC: 1
+------------------------------------------------
+UNCOMMENTED ACTION-ITEM DISCREPANCIES: 13 -- (rules, prolog)
+irrigationhoursbeforesunrise: (2, 0)
+irrigationvalvezone2time: (1, 0)
+maxallowedrain: (1, 0)
+irrigationvalvezone1time: (1, 0)
+sumrainnext24h: (1, 0)
+maxallowedwindspeed: (1, 0)
+irrigationsectionremainingtime: (1, 0)
+irrigationstartatspecifichour: (1, 0)
+sumrainlast24h: (1, 0)
+irrigationvalvezone3time: (1, 0)
+irrigationcurrentvalve: (2, 0)
+irrigationstarttime: (1, 0)
+irrigationvalvezone4time: (1, 0)
+------------------------------------------------
+1. WCC THREAT DETECTED
+    THREAT PAIR: (r1a2, r2c3)
+
+    RULES:
+        RULE_A:         [r1]: ("5 - Irrigation - all valves closed")
+        RULE_B:         [r2]: ("1 Irrigation - system start")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: Item groupirrigationvalves changed to off 
+        
+        TRIGGERS_B:     [r2t1]: System started
+
+    GUARDING CONDITIONS:
+        CONDITIONS_A:   [c0]:   no conditions guarding action 
+
+    CONDITION-ACTION PAIR:
+        ACTION_A:       [r1a2]: irrigationsectionremainingtime.postUpdate(0) 
+
+        CONDITION_B:     [r2c3]: if (irrigationsectionremainingtime == 0)
+
+    
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS ARE CONCURRENTLY ACTIVATED
+    WHILE GUARDING CONDITIONS ARE ENABLED
+    THE CONDITION-ACTION PAIR
+    MAY CAUSE UNEXPECTED BEHAVIOUR.
+
+------------------------------------------------
+

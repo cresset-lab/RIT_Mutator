@@ -1,0 +1,17 @@
+rule "13 - Select Radio Station"
+when
+    Item Radio_Station received command
+then
+    switch(receivedCommand) {
+        case 0 : playStream(null)
+        case 1 : playStream("http:
+        case 2 : playStream("http:
+    }
+end
+
+rule "9 - Records last weather update time"
+when
+    Item Weather_Temperature received update
+then
+    postUpdate(Weather_LastUpdate, new DateTimeType())
+end

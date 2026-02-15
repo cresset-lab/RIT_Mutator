@@ -1,0 +1,42 @@
+FILE: C:\Users\jason\OneDrive\Documents\TMU\CPS40A\IoT-Mutator-Noura\IoT-Mutator-Noura\Mutation_Output\Rules\Mutated\STC\STC_LightColor_0_1_1.rules
+------------------------------------------------
+THREATS DETECTED: 1
+SAC: 0
+WAC: 0
+STC: 1
+WTC: 0
+SCC: 0
+WCC: 0
+------------------------------------------------
+UNCOMMENTED ACTION-ITEM DISCREPANCIES: 5 -- (rules, prolog)
+lamp_wwdimmer: (1, 0)
+lamp_power: (2, 0)
+lamp_colorhsb: (1, 0)
+lamp_colorrgbcwstring: (1, 0)
+lamp_cwdimmer: (1, 0)
+------------------------------------------------
+1. STC THREAT DETECTED
+    THREAT PAIR: (r2a3, r1t1)
+
+    RULES:
+        RULE_A [r2]: ("HSB+CW -> RGBCW")
+        RULE_B [r1]: ("RGBCW -> HSB+CW")
+
+    TRIGGER-ACTION PAIR (ACTION_A --> TRIGGER_B):
+        ACTION_A:       [r2a3]: lamp_colorrgbcwstring.sendCommand(rgbcw)
+        TRIGGER_B:      [r1t1]: Item lamp_colorrgbcwstring received update
+        
+    RESULTANT TRIGGER CASCADE (TRIGGER_A --> ACTION_B):
+        TRIGGERS_A:     [r2t1]: Item lamp_colorhsb received command
+                    OR  [r2t2]: Item lamp_cwdimmer received command
+                    OR  [r2t3]: Item lamp_wwdimmer received command
+        ACTION_B:       [r1a1]: lamp_colorhsb.postUpdate(hsb)
+    
+
+    THREAT DESCRIPTION:
+    WHEN INITIAL TRIGGER IS ACTIVATED
+    THE TRIGGER-ACTION PAIR CAUSES 
+    A CHAIN OF ACTION EXECUTIONS.
+
+------------------------------------------------
+

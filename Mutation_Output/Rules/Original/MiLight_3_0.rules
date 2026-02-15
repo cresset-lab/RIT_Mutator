@@ -1,0 +1,16 @@
+rule "4 - Milight_ID1_G1_HUE"
+  when
+	Item Milight_ID1_G1_Hue received command
+  then
+	var iHUE 	= Math::round((receivedCommand as HSBType).getHue.intValue)
+	var iSAT 	= Math::round((receivedCommand as HSBType).getSaturation.intValue)
+	var iLEVEL 	= Math::round((receivedCommand as HSBType).getBrightness.intValue)
+	Milight_ID1_G1_Light.sendCommand('{"state":"ON","level":'+iLEVEL+',"hue":'+iHUE+',"saturation":'+iSAT+'}')
+end
+
+rule "1 - Milight_ID1_G1_ONOFF"
+  when
+	Item Milight_ID1_G1_State received command
+  then
+	Milight_ID1_G1_Light.sendCommand('{"state":"'+receivedCommand+'"}')
+end

@@ -1,0 +1,18 @@
+rule "11 - Set random image URLs"
+when
+    Time cron "/10 * * * * ?"
+then
+    val url = urlList.get(random.nextInt(urlList.length))
+    val res = resList.get(random.nextInt(resList.length))
+    postUpdate(ImageURL, url + "/" + res)
+
+end
+
+rule "9 - Records last weather update time"
+when
+    Item Weather_Temperature received update
+then
+    if (ImageURL.state == url + "/" + res)
+        postUpdate(Weather_LastUpdate, new DateTimeType ())
+
+end

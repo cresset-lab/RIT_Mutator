@@ -1,0 +1,44 @@
+rule "1 Watering_garden_startup"
+when
+    System started
+then
+    ON_R = OFF
+    OFF_R = ON
+    isWatering = false
+    WtrValveFront.sendCommand(OFF_R)
+    WtrValveBack.sendCommand(OFF_R)
+    WtrValveLine.sendCommand(OFF_R)
+    createTimer(now.plusSeconds(80)) [|
+    	 logInfo("FILE", "Watering_garden_startup: ================ Wtr param  initialization ================")
+    logInfo("FILE", "Watering_garden_startup: WtrStartTime       [" + WtrStartTime.state + "]")
+    logInfo("FILE", "Watering_garden_startup: WtrDurationFront   [" + WtrDurationFront.state + "]")
+    logInfo("FILE", "Watering_garden_startup: WtrDurationBack    [" + WtrDurationBack.state + "]")
+    logInfo("FILE", "Watering_garden_startup: WtrDurationLine    [" + WtrDurationLine.state + "]")
+    logInfo("FILE", "Watering_garden_startup: WtrScaleFactor     [" + WtrScaleFactor.state + "]")
+    logInfo("FILE", "Watering_garden_startup: WtrAuto            [" + WtrAuto.state + "]")
+    logInfo("FILE", "Watering_garden_startup: WtrRainSensor      [" + WtrRainSensor.state + "]")
+    logInfo("FILE", "Watering_garden_startup: checkWtrRainSensor [" + checkWtrRainSensor + "]")
+    logInfo("FILE", "Watering_garden_startup: checkUserStartTime [" + checkUserStartTime + "]")
+    ]
+
+end
+
+rule "6 Watering_manual_start/stop"
+when
+    Item WtrStartBtn changed from OPENto CLOSEDor
+    ItemWtrStartBtnchangedfrom NULLto CLOSED
+then
+    if(isWatering==false)
+        {
+            logInfo("FILE", "Watering_manual_start/stop: Start watering, manual activation")
+            logInfo("User pressed button START watering")
+            if (WtrValveBack.state == OFF_R)
+                Notification_Proxy_Wtr.sendCommand("START")
+        }
+    else {
+        logInfo("FILE", "Watering_manual_start/stop: Stoping  watering, manual activation")
+        logInfo("User pressed button STOP watering")
+        Notification_Proxy_Wtr.sendCommand("STOP")
+    }
+
+end

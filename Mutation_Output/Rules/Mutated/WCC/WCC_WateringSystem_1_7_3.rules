@@ -1,0 +1,56 @@
+rule "2 Rain_sensor_rain_activated"
+when
+    Item RainSensor changed from CLOSEDto OPENor
+    ItemRainSensorchangedfrom NULLto OPEN
+then
+    logInfo("FILE", "Rain_sensor_rain_detected: Rain detected, stopping watering if running")
+    logInfo("Rain sensor is wet")
+    Notification_Proxy_Wtr.sendCommand("STOP")
+
+end
+
+rule "8 Watering_algorithm"
+when
+    Time cron "0 0 0/1 1/1 * ? *"
+then
+    if (WtrAuto.state == CLOSED && (isWatering == false))
+        {
+            WtrRainfallForecast.sendCommand(rainfallMm)
+            var String NowTime = String :: format("%1$td.%1$tm.%1$tY %1$tH:%1$tM", new Date ())
+            WtrRainfallForecastDate.sendCommand(NowTime)
+            logInfo("FILE", " ======= Wheather forecast ======= ")
+            logInfo("FILE", "Watering_algorithm: rainfallMm         [" + rainfallMm + "]")
+            logInfo("FILE", "Watering_algorithm: minimumReqRainfall [" + minimumReqRainfall + "]")
+            if (WtrRainSensor.state == CLOSED || checkWtrRainSensor == false)
+                {
+                    logInfo("FILE", "Watering_algorithm: RainSensor - watering is needed, start watering")
+                    if (rainfallMm > minimumReqRainfall)
+                        {
+                            if (lastWtrDate.isBefore(now.minusDays(maxNoWtrDays)) == 0)
+                                {
+                                    logInfo("FILE", "Watering_algorithm: lastWtrDate[" + lastWtrDate +
+                                      "] is later than now-maxNoWtrDays[" + maxNoWtrDays + "]")
+                                    logInfo("Watering is starting")
+                                    if (Notification_Proxy_Wtr.state == "STOP")
+                                        Notification_Proxy_Wtr.sendCommand("START")
+                                }
+                        }
+                    else {
+                        missingRainfall = minimumReqRainfall - rainfallMm
+                        logInfo("FILE", "Watering_algorithm: lack of  [" + missingRainfall + "] mm")
+                        logInfo("Watering is starting")
+                        Notification_Proxy_Wtr.sendCommand("START")
+                    }
+                    logInfo("FILE", " ======= End of Watering algorithm  ======= ")
+                }
+            else {
+                lastWtrDate = now
+                logInfo("FILE", "Watering_algorithm: watering not started, RainSensor - watering is not needed")
+            }
+        }
+    else {
+        logInfo("FILE", "Watering_algorithm: not started. checkUserStartTime[" + checkUserStartTime + "] WtrAuto.stat[" +
+          WtrAuto.state + "] isWatering[" + isWatering + "] WtrRainSensor.state[" + WtrRainSensor.state + "]")
+    }
+
+end

@@ -1,0 +1,51 @@
+rule "6 - Irrigation - valve updated, turn on the timer"
+when
+    Item GroupIrrigationValves changed
+then
+    if (GroupIrrigationValves.state == ON)
+        {
+            if (IrrigationTimerMax.state == OFF)
+                {
+                    logDebug(logName, "Irrigation valve open, starting protection timer")
+                    IrrigationTimerMax.sendCommand(ON)
+                }
+            else {
+                logDebug(logName, "Irrigation valve open, timer already started, nothing to do")
+            }
+        }
+    else {
+        logDebug(logName, "All irrigation valves closed, stopping protection timer")
+        IrrigationTimerMax.postUpdate(OFF)
+    }
+
+end
+
+rule "3 - Irrigation - cascading"
+when
+    Item IrrigationCurrentValve received command
+then
+    val currValveNum = Integer :: parseInt(currValve.name.split("Zone").get(1))
+    logDebug(logName, "Current valve {}, duration {}", currValve.name, currValveMins)
+    val nextValveNum = currValveNum + 1
+    val nextValveName = "IrrigationValveZone" + nextValveNum
+    if (nextValve === null)
+        logDebug(logName, "This is the last valve in the sequence")
+    else logDebug(logName, "Next valve {}", nextValve.name)
+    val valveOpenTime = currValveMins * coefficientFactor
+    logInfo(logName, "Opening {} for {} mins", currValve.name, valveOpenTime)
+    currValve.sendCommand(ON)
+    if (IrrigationTimerMax.state == OFF)
+        IrrigationSectionRemainingTime.postUpdate(valveOpenTime.intValue)
+    if (nextValve !== null)
+        {
+            IrrigationCurrentValve.sendCommand(nextValve.name)
+        }
+    else {
+        logInfo(logName, "Irrigation is complete")
+    }
+    Thread :: sleep(500)
+    logInfo(logName, "Closing " + currValve.name)
+    currValve.sendCommand(OFF)
+    irrigationTimer = null
+
+end

@@ -1,0 +1,15 @@
+rule "9 - Records last weather update time"
+when
+    Item Weather_Temperature received update
+then
+    postUpdate(Weather_LastUpdate, new DateTimeType ())
+
+end
+
+rule "6 - Initialize Location"
+when
+    System started
+then
+    Weather_LastUpdate.postUpdate(new PointType ("52.5200066,13.4049540"))
+
+end

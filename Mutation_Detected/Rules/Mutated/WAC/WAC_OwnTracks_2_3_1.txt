@@ -1,0 +1,13 @@
+FILE: C:\Users\jason\OneDrive\Documents\TMU\CPS40A\IoT-Mutator-Noura\IoT-Mutator-Noura\Mutation_Output\Rules\Mutated\WAC\WAC_OwnTracks_2_3_1.rules
+------------------------------------------------
+THREATS DETECTED: 0
+SAC: 0
+WAC: 0
+STC: 0
+WTC: 0
+SCC: 0
+WCC: 0
+------------------------------------------------
+UNCOMMENTED ACTION-ITEM DISCREPANCIES: 1 -- (rules, prolog)
+josh: (4, 0)
+------------------------------------------------

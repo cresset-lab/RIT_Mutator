@@ -1,0 +1,22 @@
+rule "3 - Milight_ID1_G1_CT"
+when
+    Item Milight_ID1_G1_CTemp received command
+then
+    var iVAL = (receivedCommand as DecimalType).intValue
+    var iCTEMP = (370 - (2.17 * iVAL)).intValue
+    if (Milight_ID1_G1_State.state == OFF)
+        Milight_ID1_G1_State.postUpdate(ON)
+    Milight_ID1_G1_Light.sendCommand('{"state":"ON","color_temp":' + iCTEMP + '}')
+
+end
+
+rule "4 - Milight_ID1_G1_HUE"
+when
+    Item Milight_ID1_G1_State received command
+then
+    var iHUE = Math :: round((receivedCommand as HSBType).getHue.intValue)
+    var iSAT = Math :: round((receivedCommand as HSBType).getSaturation.intValue)
+    var iLEVEL = Math :: round((receivedCommand as HSBType).getBrightness.intValue)
+    Milight_ID1_G1_Light.sendCommand('{"state":"ON","level":' + iLEVEL + ',"hue":' + iHUE + ',"saturation":' + iSAT + '}')
+
+end

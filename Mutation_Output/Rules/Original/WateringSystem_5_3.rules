@@ -1,0 +1,24 @@
+rule "6 Watering_manual_start/stop"
+    when
+	    Item WtrStartBtn changed from OPEN to CLOSED or
+        Item WtrStartBtn changed from NULL to CLOSED
+    then
+		
+    	if ( isWatering == false ) {
+    		logInfo( "FILE", "Watering_manual_start/stop: Start watering, manual activation")
+    		logInfo("User pressed button START watering")
+    		Notification_Proxy_Wtr.sendCommand("START")
+    	} else { 
+    		logInfo( "FILE", "Watering_manual_start/stop: Stoping  watering, manual activation")
+    		logInfo("User pressed button STOP watering")
+    		Notification_Proxy_Wtr.sendCommand("STOP")
+    	}    
+end
+
+rule "4 Wtr_auto_ON" 
+	when
+		Item WtrAuto changed from OPEN to CLOSED or
+        Item WtrAuto changed from NULL to CLOSED
+	then
+		logInfo("Watering mode is set to automatic")
+end

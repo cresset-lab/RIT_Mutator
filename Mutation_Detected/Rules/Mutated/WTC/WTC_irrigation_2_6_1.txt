@@ -1,0 +1,43 @@
+FILE: C:\Users\jason\OneDrive\Documents\TMU\CPS40A\IoT-Mutator-Noura\IoT-Mutator-Noura\Mutation_Output\Rules\Mutated\WTC\WTC_irrigation_2_6_1.rules
+------------------------------------------------
+THREATS DETECTED: 1
+SAC: 0
+WAC: 0
+STC: 0
+WTC: 1
+SCC: 0
+WCC: 0
+------------------------------------------------
+UNCOMMENTED ACTION-ITEM DISCREPANCIES: 4 -- (rules, prolog)
+irrigationsectionremainingtime: (1, 0)
+currvalve: (2, 0)
+valve: (1, 0)
+irrigationcurrentvalve: (1, 0)
+------------------------------------------------
+1. WTC THREAT DETECTED
+    THREAT PAIR: (r1a3, r2t1)
+
+    RULES:
+        RULE_A:         [r1]: ("3 - Irrigation - cascading")
+        RULE_B:         [r2]: ("7 - Irrigation - protection timer off, close all valves")
+
+    TRIGGER-ACTION PAIR (ACTION_A --> TRIGGER_B):
+        ACTION_A:       [r1a3]: irrigationcurrentvalve.sendCommand(nextvalve.name)
+        TRIGGER_B:      [r2t1]: Item irrigationcurrentvalve changed
+
+    OVERLAPPING GUARDING CONDITIONS:
+        CONDITIONS_A:   [r1c3]: if (nextvalve !== null) 
+        
+        CONDITIONS_B:   [c0]:   no conditions guarding action
+
+    RESULTANT TRIGGER CASCADE (TRIGGER_A --> ACTION_B):
+        TRIGGERS_A:     [r1t1]: Item irrigationcurrentvalve received command
+        ACTION_B:       [r2a1]: valve.sendCommand(off)
+
+    THREAT DESCRIPTION:
+    WHEN INITIAL TRIGGER IS ACTIVATED
+    IF OVERLAPPING SETS OF CONDITIONS ARE CONCURRENTLY ENABLED
+    THE TRIGGER-ACTION PAIR CAUSES A CHAIN OF ACTION EXECUTIONS.
+
+------------------------------------------------
+

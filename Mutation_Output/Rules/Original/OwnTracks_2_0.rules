@@ -1,0 +1,18 @@
+rule "3 - System Start"
+when
+        System started
+then
+        if(phone_Josh.state == ON){
+                postUpdate(josh, "Home")
+        }
+        else if (phone_Josh_Work.state == ON)
+                postUpdate(josh, "Work")
+        else postUpdate(josh, "Away")
+end
+
+rule "1 - Josh Moving switch on"
+when Item josh_moving received update ON
+then
+	josh_moving_location = locationJosh.state
+        logInfo("josh_moving_location updated","josh_moving_location set to" + josh_moving_location)
+end

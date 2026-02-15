@@ -1,0 +1,28 @@
+rule "1 - Dimmed Light"
+when
+    Item DimmedLight received command
+then
+    if ((receivedCommand == INCREASE) || (receivedCommand == DECREASE)) {
+        var Number percent = 0
+        if (DimmedLight.state instanceof DecimalType) percent = DimmedLight.state as DecimalType
+
+        if (receivedCommand == INCREASE) percent = percent + 5
+        if (receivedCommand == DECREASE) percent = percent - 5
+
+        if (percent < 0)   percent = 0
+        if (percent > 100) percent = 100
+        postUpdate(DimmedLight, percent);
+    }
+    var Number percent = 0
+end
+
+rule "13 - Select Radio Station"
+when
+    Item Radio_Station received command
+then
+    switch(receivedCommand) {
+        case 0 : playStream(null)
+        case 1 : playStream("http:
+        case 2 : playStream("http:
+    }
+end

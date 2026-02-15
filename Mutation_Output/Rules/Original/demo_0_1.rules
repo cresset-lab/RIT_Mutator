@@ -1,0 +1,43 @@
+rule "1 - Dimmed Light"
+when
+    Item DimmedLight received command
+then
+    if ((receivedCommand == INCREASE) || (receivedCommand == DECREASE)) {
+        var Number percent = 0
+        if (DimmedLight.state instanceof DecimalType) percent = DimmedLight.state as DecimalType
+
+        if (receivedCommand == INCREASE) percent = percent + 5
+        if (receivedCommand == DECREASE) percent = percent - 5
+
+        if (percent < 0)   percent = 0
+        if (percent > 100) percent = 100
+        postUpdate(DimmedLight, percent);
+    }
+    var Number percent = 0
+end
+
+rule "2 - Timer Demo"
+when
+    Item Light_GF_Corridor_Ceiling received command
+then
+    if (receivedCommand == ON) 
+    {
+        if (timer === null) 
+        {
+            
+            timer = createTimer(now.plusSeconds(10)) [|
+                sendCommand(Light_GF_Corridor_Ceiling, OFF)
+            ]
+        } else {
+            
+            timer.reschedule(now.plusSeconds(10))
+        }
+    } else if (receivedCommand == OFF) {
+        
+        if (timer !== null) {
+            timer.cancel
+            timer = null
+        }
+    }
+    var Number percent = 0
+end

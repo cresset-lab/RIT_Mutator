@@ -1,0 +1,18 @@
+rule "10 - Set random wifi variations"
+when
+    System started or
+    Time cron "/20 * * * * ?"
+then
+    postUpdate(Wifi_Level, (Math :: random * 4.0).intValue)
+
+end
+
+rule "11 - Set random image URLs"
+when
+    Item Wifi_Level changed
+then
+    val url = urlList.get(random.nextInt(urlList.length))
+    val res = resList.get(random.nextInt(resList.length))
+    postUpdate(ImageURL, url + "/" + res)
+
+end

@@ -1,0 +1,47 @@
+FILE: C:\Users\jason\OneDrive\Documents\TMU\CPS40A\IoT-Mutator-Noura\IoT-Mutator-Noura\Mutation_Output\Rules\Mutated\WCC\WCC_WateringSystem_6_5_22.rules
+------------------------------------------------
+THREATS DETECTED: 1
+SAC: 0
+WAC: 0
+STC: 0
+WTC: 0
+SCC: 0
+WCC: 1
+------------------------------------------------
+UNCOMMENTED ACTION-ITEM DISCREPANCIES: 6 -- (rules, prolog)
+wtrlastdate: (1, 0)
+wtrled: (3, 0)
+notification_proxy_wtr: (2, 0)
+wtrvalvefront: (3, 0)
+wtrvalveline: (3, 0)
+wtrvalveback: (3, 0)
+------------------------------------------------
+1. WCC THREAT DETECTED
+    THREAT PAIR: (r1a3, r2c5)
+
+    RULES:
+        RULE_A:         [r1]: ("1 Watering_garden_startup")
+        RULE_B:         [r2]: ("8 Watering_algorithm")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: System started 
+        
+        TRIGGERS_B:     [r2t1]: Time cron 0 0 0/1 1/1 * ? *
+
+    GUARDING CONDITIONS:
+        CONDITIONS_A:   [c0]:   no conditions guarding action 
+
+    CONDITION-ACTION PAIR:
+        ACTION_A:       [r1a3]: wtrvalveline.sendCommand(off_r) 
+
+        CONDITION_B:     [r2c5]: if (wtrvalveline == off_r)
+
+    
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS ARE CONCURRENTLY ACTIVATED
+    WHILE GUARDING CONDITIONS ARE ENABLED
+    THE CONDITION-ACTION PAIR
+    MAY CAUSE UNEXPECTED BEHAVIOUR.
+
+------------------------------------------------
+

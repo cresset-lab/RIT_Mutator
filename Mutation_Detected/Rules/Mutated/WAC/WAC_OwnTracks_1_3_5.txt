@@ -1,0 +1,47 @@
+FILE: C:\Users\jason\OneDrive\Documents\TMU\CPS40A\IoT-Mutator-Noura\IoT-Mutator-Noura\Mutation_Output\Rules\Mutated\WAC\WAC_OwnTracks_1_3_5.rules
+------------------------------------------------
+THREATS DETECTED: 1
+SAC: 0
+WAC: 1
+STC: 0
+WTC: 0
+SCC: 0
+WCC: 0
+------------------------------------------------
+UNCOMMENTED ACTION-ITEM DISCREPANCIES: 7 -- (rules, prolog)
+locationjosh: (1, 0)
+mqttjoshbattery: (2, 0)
+mqttjoshlatitude: (1, 0)
+mqttjoshlongitude: (1, 0)
+mqttjoshaccuracy: (1, 0)
+joshdistancefromhome: (1, 0)
+josh_moving: (1, 0)
+------------------------------------------------
+1. WAC THREAT DETECTED
+    THREAT PAIR: (r1a5, r2a1)
+    
+    RULES:
+        RULE_A [r1]: ("2 - MqttPostionParseJosh")
+        RULE_B [r2]: ("4 - Daddy's Home")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: Item mqttpositionjoshraw changed 
+        
+        TRIGGERS_B:     [r2t1]: Item phone_josh changed to on
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [r1c1]: if (type == "location") 
+        
+        CONDITIONS_B:   [c0]:   no conditions guarding action
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r1a5]: mqttjoshbattery.postUpdate(batt)
+        ACTION_B:       [r2a1]: mqttjoshbattery.postUpdate("Home")
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+

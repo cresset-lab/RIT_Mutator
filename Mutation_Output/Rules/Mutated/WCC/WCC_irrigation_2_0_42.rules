@@ -1,0 +1,61 @@
+rule "3 - Irrigation - cascading"
+when
+    Item IrrigationCurrentValve received command
+then
+    val currValveNum = Integer :: parseInt(currValve.name.split("Zone").get(1))
+    logDebug(logName, "Current valve {}, duration {}", currValve.name, currValveMins)
+    val nextValveNum = currValveNum + 1
+    val nextValveName = "IrrigationValveZone" + nextValveNum
+    if (nextValve === null)
+        logDebug(logName, "This is the last valve in the sequence")
+    else logDebug(logName, "Next valve {}", nextValve.name)
+    val valveOpenTime = currValveMins * coefficientFactor
+    logInfo(logName, "Opening {} for {} mins", currValve.name, valveOpenTime)
+    currValve.sendCommand(ON)
+    IrrigationSectionRemainingTime.postUpdate(valveOpenTime.intValue)
+    if (nextValve !== null)
+        {
+            IrrigationCurrentValve.sendCommand(nextValve.name)
+        }
+    else {
+        logInfo(logName, "Irrigation is complete")
+    }
+    Thread :: sleep(500)
+    logInfo(logName, "Closing " + currValve.name)
+    currValve.sendCommand(OFF)
+    irrigationTimer = null
+
+end
+
+rule "1 Irrigation - system start"
+when
+    System started
+then
+    if (SumRainLast24h.state == NULL)
+        SumRainLast24h.sendCommand(0)
+    if (SumRainNext24h.state == NULL)
+        SumRainNext24h.sendCommand(0)
+    if (MaxAllowedWindSpeed.state == NULL)
+        MaxAllowedWindSpeed.sendCommand(35)
+    if (MaxAllowedRain.state == NULL)
+        MaxAllowedRain.sendCommand(3)
+    if (IrrigationHoursBeforeSunrise.state == NULL)
+        IrrigationHoursBeforeSunrise.sendCommand(1)
+    if (IrrigationValveZone1Time.state == NULL)
+        if (currValve.state == OFF)
+            IrrigationValveZone1Time.sendCommand(1)
+    if (IrrigationValveZone2Time.state == NULL)
+        IrrigationValveZone2Time.sendCommand(1)
+    if (IrrigationValveZone3Time.state == NULL)
+        IrrigationValveZone3Time.sendCommand(1)
+    if (IrrigationValveZone4Time.state == NULL)
+        IrrigationValveZone4Time.sendCommand(1)
+    if (IrrigationStartAtSpecificHour.state == NULL)
+        IrrigationStartAtSpecificHour.sendCommand(OFF)
+    if (IrrigationStartTime.state == NULL)
+        IrrigationStartTime.sendCommand(20)
+    if (IrrigationHoursBeforeSunrise.state == NULL)
+        IrrigationHoursBeforeSunrise.sendCommand(1)
+    IrrigationCurrentValve.postUpdate(OFF)
+
+end

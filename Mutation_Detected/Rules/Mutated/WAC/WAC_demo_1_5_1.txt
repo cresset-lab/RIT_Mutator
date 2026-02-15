@@ -1,0 +1,43 @@
+FILE: C:\Users\jason\OneDrive\Documents\TMU\CPS40A\IoT-Mutator-Noura\IoT-Mutator-Noura\Mutation_Output\Rules\Mutated\WAC\WAC_demo_1_5_1.rules
+------------------------------------------------
+THREATS DETECTED: 1
+SAC: 0
+WAC: 1
+STC: 0
+WTC: 0
+SCC: 0
+WCC: 0
+------------------------------------------------
+UNCOMMENTED ACTION-ITEM DISCREPANCIES: 1 -- (rules, prolog)
+light_gf_corridor_ceiling: (2, 0)
+------------------------------------------------
+1. WAC THREAT DETECTED
+    THREAT PAIR: (r1a1, r2a1)
+    
+    RULES:
+        RULE_A [r1]: ("2 - Timer Demo")
+        RULE_B [r2]: ("10 - Set random wifi variations")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: Item light_gf_corridor_ceiling received command 
+        
+        TRIGGERS_B:     [r2t1]: System started
+                    OR  [r2t2]: Time cron /20 * * * * ?
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [r1c1]: if (receivedcommand == on)
+                    AND [r1c3]: if (timer === null) 
+        
+        CONDITIONS_B:   [c0]:   no conditions guarding action
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r1a1]: light_gf_corridor_ceiling.sendCommand(off)
+        ACTION_B:       [r2a1]: light_gf_corridor_ceiling.postUpdate(on)
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+

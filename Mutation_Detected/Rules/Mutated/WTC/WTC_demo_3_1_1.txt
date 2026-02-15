@@ -1,0 +1,15 @@
+FILE: C:\Users\jason\OneDrive\Documents\TMU\CPS40A\IoT-Mutator-Noura\IoT-Mutator-Noura\Mutation_Output\Rules\Mutated\WTC\WTC_demo_3_1_1.rules
+------------------------------------------------
+THREATS DETECTED: 0
+SAC: 0
+WAC: 0
+STC: 0
+WTC: 0
+SCC: 0
+WCC: 0
+------------------------------------------------
+UNCOMMENTED ACTION-ITEM DISCREPANCIES: 3 -- (rules, prolog)
+weather_temp_min: (1, 0)
+weather_temp_max: (1, 0)
+light_gf_corridor_ceiling: (1, 0)
+------------------------------------------------

@@ -1,0 +1,14 @@
+rule "10 - Set random wifi variations"
+when
+    System started or
+    Time cron "/20 * * * * ?"
+then
+    postUpdate(Wifi_Level, (Math::random * 4.0).intValue)
+end
+
+rule "6 - Initialize Location"
+when
+    System started
+then
+    DemoLocation.postUpdate(new PointType("52.5200066,13.4049540"))
+end

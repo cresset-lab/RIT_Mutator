@@ -1,0 +1,153 @@
+FILE: C:\Users\jason\OneDrive\Documents\TMU\CPS40A\IoT-Mutator-Noura\IoT-Mutator-Noura\Mutation_Output\Rules\Mutated\WTC\WTC_OwnTracks_2_4_2.rules
+------------------------------------------------
+THREATS DETECTED: 5
+SAC: 0
+WAC: 2
+STC: 0
+WTC: 3
+SCC: 0
+WCC: 0
+------------------------------------------------
+UNCOMMENTED ACTION-ITEM DISCREPANCIES: 1 -- (rules, prolog)
+josh: (4, 0)
+------------------------------------------------
+1. WAC THREAT DETECTED
+    THREAT PAIR: (r1a1, r2a1)
+    
+    RULES:
+        RULE_A [r1]: ("3 - System Start")
+        RULE_B [r2]: ("5 - Josh leaves home")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: System started 
+        
+        TRIGGERS_B:     [r2t1]: Item josh received update
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [r1c1]: if (phone_josh == on) 
+        
+        CONDITIONS_B:   [c0]:   no conditions guarding action
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r1a1]: josh.postUpdate("Home")
+        ACTION_B:       [r2a1]: josh.postUpdate("Away")
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+2. WAC THREAT DETECTED
+    THREAT PAIR: (r1a2, r2a1)
+    
+    RULES:
+        RULE_A [r1]: ("3 - System Start")
+        RULE_B [r2]: ("5 - Josh leaves home")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: System started 
+        
+        TRIGGERS_B:     [r2t1]: Item josh received update
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [r1c2]: if (phone_josh != on)
+                    AND [r1c3]: if (phone_josh_work == on) 
+        
+        CONDITIONS_B:   [c0]:   no conditions guarding action
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r1a2]: josh.postUpdate("Work")
+        ACTION_B:       [r2a1]: josh.postUpdate("Away")
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+3. WTC THREAT DETECTED
+    THREAT PAIR: (r1a1, r2t1)
+
+    RULES:
+        RULE_A:         [r1]: ("3 - System Start")
+        RULE_B:         [r2]: ("5 - Josh leaves home")
+
+    TRIGGER-ACTION PAIR (ACTION_A --> TRIGGER_B):
+        ACTION_A:       [r1a1]: josh.postUpdate("Home")
+        TRIGGER_B:      [r2t1]: Item josh received update
+
+    OVERLAPPING GUARDING CONDITIONS:
+        CONDITIONS_A:   [r1c1]: if (phone_josh == on) 
+        
+        CONDITIONS_B:   [c0]:   no conditions guarding action
+
+    RESULTANT TRIGGER CASCADE (TRIGGER_A --> ACTION_B):
+        TRIGGERS_A:     [r1t1]: System started
+        ACTION_B:       [r2a1]: josh.postUpdate("Away")
+
+    THREAT DESCRIPTION:
+    WHEN INITIAL TRIGGER IS ACTIVATED
+    IF OVERLAPPING SETS OF CONDITIONS ARE CONCURRENTLY ENABLED
+    THE TRIGGER-ACTION PAIR CAUSES A CHAIN OF ACTION EXECUTIONS.
+
+------------------------------------------------
+
+4. WTC THREAT DETECTED
+    THREAT PAIR: (r1a2, r2t1)
+
+    RULES:
+        RULE_A:         [r1]: ("3 - System Start")
+        RULE_B:         [r2]: ("5 - Josh leaves home")
+
+    TRIGGER-ACTION PAIR (ACTION_A --> TRIGGER_B):
+        ACTION_A:       [r1a2]: josh.postUpdate("Work")
+        TRIGGER_B:      [r2t1]: Item josh received update
+
+    OVERLAPPING GUARDING CONDITIONS:
+        CONDITIONS_A:   [r1c2]: if (phone_josh != on)
+                    AND [r1c3]: if (phone_josh_work == on) 
+        
+        CONDITIONS_B:   [c0]:   no conditions guarding action
+
+    RESULTANT TRIGGER CASCADE (TRIGGER_A --> ACTION_B):
+        TRIGGERS_A:     [r1t1]: System started
+        ACTION_B:       [r2a1]: josh.postUpdate("Away")
+
+    THREAT DESCRIPTION:
+    WHEN INITIAL TRIGGER IS ACTIVATED
+    IF OVERLAPPING SETS OF CONDITIONS ARE CONCURRENTLY ENABLED
+    THE TRIGGER-ACTION PAIR CAUSES A CHAIN OF ACTION EXECUTIONS.
+
+------------------------------------------------
+
+5. WTC THREAT DETECTED
+    THREAT PAIR: (r1a3, r2t1)
+
+    RULES:
+        RULE_A:         [r1]: ("3 - System Start")
+        RULE_B:         [r2]: ("5 - Josh leaves home")
+
+    TRIGGER-ACTION PAIR (ACTION_A --> TRIGGER_B):
+        ACTION_A:       [r1a3]: josh.postUpdate("Away")
+        TRIGGER_B:      [r2t1]: Item josh received update
+
+    OVERLAPPING GUARDING CONDITIONS:
+        CONDITIONS_A:   [r1c2]: if (phone_josh != on)
+                    AND [r1c4]: if (phone_josh_work != on) 
+        
+        CONDITIONS_B:   [c0]:   no conditions guarding action
+
+    RESULTANT TRIGGER CASCADE (TRIGGER_A --> ACTION_B):
+        TRIGGERS_A:     [r1t1]: System started
+        ACTION_B:       [r2a1]: josh.postUpdate("Away")
+
+    THREAT DESCRIPTION:
+    WHEN INITIAL TRIGGER IS ACTIVATED
+    IF OVERLAPPING SETS OF CONDITIONS ARE CONCURRENTLY ENABLED
+    THE TRIGGER-ACTION PAIR CAUSES A CHAIN OF ACTION EXECUTIONS.
+
+------------------------------------------------
+

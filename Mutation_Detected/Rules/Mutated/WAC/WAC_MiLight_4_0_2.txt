@@ -1,0 +1,44 @@
+FILE: C:\Users\jason\OneDrive\Documents\TMU\CPS40A\IoT-Mutator-Noura\IoT-Mutator-Noura\Mutation_Output\Rules\Mutated\WAC\WAC_MiLight_4_0_2.rules
+------------------------------------------------
+THREATS DETECTED: 1
+SAC: 0
+WAC: 1
+STC: 0
+WTC: 0
+SCC: 0
+WCC: 0
+------------------------------------------------
+UNCOMMENTED ACTION-ITEM DISCREPANCIES: 4 -- (rules, prolog)
+milight_id1_g1_brightness: (2, 0)
+milight_id1_g1_hue: (1, 0)
+milight_id1_g1_state: (1, 0)
+milight_id1_g1_ctemp: (2, 0)
+------------------------------------------------
+1. WAC THREAT DETECTED
+    THREAT PAIR: (r1a2, r2a1)
+    
+    RULES:
+        RULE_A [r1]: ("5 - Milight_ID1_G1_HubStates")
+        RULE_B [r2]: ("1 - Milight_ID1_G1_ONOFF")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: Item milight_id1_g1_espmilighthub changed 
+        
+        TRIGGERS_B:     [r2t1]: Item milight_id1_g1_state received command
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [r1c2]: if (smode == "white") 
+        
+        CONDITIONS_B:   [c0]:   no conditions guarding action
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r1a2]: milight_id1_g1_ctemp.postUpdate(itempscaled)
+        ACTION_B:       [r2a1]: milight_id1_g1_ctemp.sendCommand('{"state":"' + receivedcommand + '"}')
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+

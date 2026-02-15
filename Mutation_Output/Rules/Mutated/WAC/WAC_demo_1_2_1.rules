@@ -1,0 +1,35 @@
+rule "2 - Timer Demo"
+when
+    Item Light_GF_Corridor_Ceiling received command
+then
+    if (receivedCommand == ON)
+        {
+            if (timer === null)
+                {
+                    timer = createTimer(now.plusSeconds(10)) [|
+                    	 sendCommand(Light_GF_Corridor_Ceiling, OFF)
+                    ]
+                }
+            else {
+                timer.reschedule(now.plusSeconds(10))
+            }
+        }
+    else if (receivedCommand == OFF)
+        {
+            if (timer !== null)
+                {
+                    timer.cancel
+                    timer = null
+                }
+        }
+    var Number percent = 0
+
+end
+
+rule "6 - Initialize Location"
+when
+    System started
+then
+    Light_GF_Corridor_Ceiling.postUpdate(ON)
+
+end

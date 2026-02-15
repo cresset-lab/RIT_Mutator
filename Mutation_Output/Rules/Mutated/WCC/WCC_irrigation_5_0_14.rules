@@ -1,0 +1,54 @@
+rule "6 - Irrigation - valve updated, turn on the timer"
+when
+    Item GroupIrrigationValves changed
+then
+    if (GroupIrrigationValves.state == ON)
+        {
+            if (IrrigationTimerMax.state == OFF)
+                {
+                    logDebug(logName, "Irrigation valve open, starting protection timer")
+                    IrrigationTimerMax.sendCommand(ON)
+                }
+            else {
+                logDebug(logName, "Irrigation valve open, timer already started, nothing to do")
+            }
+        }
+    else {
+        logDebug(logName, "All irrigation valves closed, stopping protection timer")
+        IrrigationTimerMax.postUpdate(OFF)
+    }
+
+end
+
+rule "1 Irrigation - system start"
+when
+    System started
+then
+    if (SumRainLast24h.state == NULL)
+        SumRainLast24h.sendCommand(0)
+    if (SumRainNext24h.state == NULL)
+        if (IrrigationTimerMax.state == OFF)
+            SumRainNext24h.sendCommand(0)
+    if (MaxAllowedWindSpeed.state == NULL)
+        MaxAllowedWindSpeed.sendCommand(35)
+    if (MaxAllowedRain.state == NULL)
+        MaxAllowedRain.sendCommand(3)
+    if (IrrigationHoursBeforeSunrise.state == NULL)
+        IrrigationHoursBeforeSunrise.sendCommand(1)
+    if (IrrigationValveZone1Time.state == NULL)
+        IrrigationValveZone1Time.sendCommand(1)
+    if (IrrigationValveZone2Time.state == NULL)
+        IrrigationValveZone2Time.sendCommand(1)
+    if (IrrigationValveZone3Time.state == NULL)
+        IrrigationValveZone3Time.sendCommand(1)
+    if (IrrigationValveZone4Time.state == NULL)
+        IrrigationValveZone4Time.sendCommand(1)
+    if (IrrigationStartAtSpecificHour.state == NULL)
+        IrrigationStartAtSpecificHour.sendCommand(OFF)
+    if (IrrigationStartTime.state == NULL)
+        IrrigationStartTime.sendCommand(20)
+    if (IrrigationHoursBeforeSunrise.state == NULL)
+        IrrigationHoursBeforeSunrise.sendCommand(1)
+    IrrigationCurrentValve.postUpdate(OFF)
+
+end

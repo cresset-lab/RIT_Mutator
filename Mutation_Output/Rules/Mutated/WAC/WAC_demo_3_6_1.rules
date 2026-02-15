@@ -1,0 +1,23 @@
+rule "8 - Set daily max and min temperature"
+when
+    Item Weather_Temperature changed or
+    Time cron "0 0 0 * * ?" or
+    System started
+then
+    if (max !== null && min !== null)
+        {
+            postUpdate(Weather_Temp_Max, max.state)
+            postUpdate(Weather_Temp_Min, min.state)
+        }
+
+end
+
+rule "11 - Set random image URLs"
+when
+    Time cron "/10 * * * * ?"
+then
+    val url = urlList.get(random.nextInt(urlList.length))
+    val res = resList.get(random.nextInt(resList.length))
+    postUpdate(Weather_Temp_Max, url + "/" + res)
+
+end

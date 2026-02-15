@@ -1,0 +1,14 @@
+rule "4 - Daddy's Home"
+when
+        Item phone_Josh changed from OFF to ON
+
+then
+        postUpdate(josh, "Home")
+end
+
+rule "1 - Josh Moving switch on"
+when Item josh_moving received update ON
+then
+	josh_moving_location = locationJosh.state
+        logInfo("josh_moving_location updated","josh_moving_location set to" + josh_moving_location)
+end

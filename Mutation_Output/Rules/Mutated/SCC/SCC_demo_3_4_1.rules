@@ -1,0 +1,22 @@
+rule "8 - Set daily max and min temperature"
+when
+    Item Weather_Temperature changed or
+    Time cron "0 0 0 * * ?" or
+    System started
+then
+    if (max !== null && min !== null)
+        {
+            postUpdate(Weather_Temp_Max, max.state)
+            postUpdate(Weather_Temp_Min, min.state)
+        }
+
+end
+
+rule "9 - Records last weather update time"
+when
+    Item Weather_Temperature received update
+then
+    if (Weather_Temp_Max.state == max.state)
+        postUpdate(Weather_LastUpdate, new DateTimeType ())
+
+end

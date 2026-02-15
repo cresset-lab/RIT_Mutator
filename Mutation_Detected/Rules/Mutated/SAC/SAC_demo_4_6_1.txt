@@ -1,0 +1,36 @@
+FILE: C:\Users\jason\OneDrive\Documents\TMU\CPS40A\IoT-Mutator-Noura\IoT-Mutator-Noura\Mutation_Output\Rules\Mutated\SAC\SAC_demo_4_6_1.rules
+------------------------------------------------
+THREATS DETECTED: 1
+SAC: 1
+WAC: 0
+STC: 0
+WTC: 0
+SCC: 0
+WCC: 0
+------------------------------------------------
+UNCOMMENTED ACTION-ITEM DISCREPANCIES: 1 -- (rules, prolog)
+weather_lastupdate: (2, 0)
+------------------------------------------------
+1. SAC THREAT DETECTED
+    THREAT PAIR: (r1a1, r2a1)
+    
+    RULES:
+        RULE_A [r1]: ("9 - Records last weather update time")
+        RULE_B [r2]: ("11 - Set random image URLs")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: Item weather_temperature received update 
+        
+        TRIGGERS_B:     [r2t1]: Time cron /10 * * * * ?
+    
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r1a1]: weather_lastupdate.postUpdate(new datetimetype ())
+        ACTION_B:       [r2a1]: weather_lastupdate.postUpdate(url + "/" + res)
+    
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+

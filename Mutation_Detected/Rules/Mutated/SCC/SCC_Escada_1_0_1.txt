@@ -1,0 +1,100 @@
+FILE: C:\Users\jason\OneDrive\Documents\TMU\CPS40A\IoT-Mutator-Noura\IoT-Mutator-Noura\Mutation_Output\Rules\Mutated\SCC\SCC_Escada_1_0_1.rules
+------------------------------------------------
+THREATS DETECTED: 3
+SAC: 0
+WAC: 0
+STC: 0
+WTC: 2
+SCC: 1
+WCC: 0
+------------------------------------------------
+UNCOMMENTED ACTION-ITEM DISCREPANCIES: 2 -- (rules, prolog)
+luz_gter_salaestar_escada: (1, 0)
+luz_gsup_escada: (1, 0)
+------------------------------------------------
+1. WTC THREAT DETECTED
+    THREAT PAIR: (r1a1, r2t1)
+
+    RULES:
+        RULE_A:         [r1]: ("Luz da escada inferior mudou")
+        RULE_B:         [r2]: ("Luz da escada superior mudou")
+
+    TRIGGER-ACTION PAIR (ACTION_A --> TRIGGER_B):
+        ACTION_A:       [r1a1]: luz_gsup_escada.sendCommand(luz_gter_salaestar_escada.state.tostring)
+        TRIGGER_B:      [r2t1]: Item luz_gsup_escada changed
+
+    OVERLAPPING GUARDING CONDITIONS:
+        CONDITIONS_A:   [c0]:   no conditions guarding action 
+        
+        CONDITIONS_B:   [r2c1]: if (luz_gsup_escada == luz_gter_salaestar_escada.state.tostring)
+
+    RESULTANT TRIGGER CASCADE (TRIGGER_A --> ACTION_B):
+        TRIGGERS_A:     [r1t1]: Item luz_gter_salaestar_escada changed
+        ACTION_B:       [r2a1]: luz_gter_salaestar_escada.sendCommand(luz_gsup_escada.state.tostring)
+
+    THREAT DESCRIPTION:
+    WHEN INITIAL TRIGGER IS ACTIVATED
+    IF OVERLAPPING SETS OF CONDITIONS ARE CONCURRENTLY ENABLED
+    THE TRIGGER-ACTION PAIR CAUSES A CHAIN OF ACTION EXECUTIONS.
+
+------------------------------------------------
+
+2. WTC THREAT DETECTED
+    THREAT PAIR: (r2a1, r1t1)
+
+    RULES:
+        RULE_A:         [r2]: ("Luz da escada superior mudou")
+        RULE_B:         [r1]: ("Luz da escada inferior mudou")
+
+    TRIGGER-ACTION PAIR (ACTION_A --> TRIGGER_B):
+        ACTION_A:       [r2a1]: luz_gter_salaestar_escada.sendCommand(luz_gsup_escada.state.tostring)
+        TRIGGER_B:      [r1t1]: Item luz_gter_salaestar_escada changed
+
+    OVERLAPPING GUARDING CONDITIONS:
+        CONDITIONS_A:   [r2c1]: if (luz_gsup_escada == luz_gter_salaestar_escada.state.tostring) 
+        
+        CONDITIONS_B:   [c0]:   no conditions guarding action
+
+    RESULTANT TRIGGER CASCADE (TRIGGER_A --> ACTION_B):
+        TRIGGERS_A:     [r2t1]: Item luz_gsup_escada changed
+        ACTION_B:       [r1a1]: luz_gsup_escada.sendCommand(luz_gter_salaestar_escada.state.tostring)
+
+    THREAT DESCRIPTION:
+    WHEN INITIAL TRIGGER IS ACTIVATED
+    IF OVERLAPPING SETS OF CONDITIONS ARE CONCURRENTLY ENABLED
+    THE TRIGGER-ACTION PAIR CAUSES A CHAIN OF ACTION EXECUTIONS.
+
+------------------------------------------------
+
+3. SCC THREAT DETECTED
+    THREAT PAIR: (r1a1, r2c1)
+
+    RULES:
+        RULE_A:         [r1]: ("Luz da escada inferior mudou")
+        RULE_B:         [r2]: ("Luz da escada superior mudou")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: Item luz_gter_salaestar_escada changed 
+        
+        TRIGGERS_B:     [r2t1]: Item luz_gsup_escada changed
+
+    GUARDING CONDITIONS:
+        CONDITIONS_A:   [c0]:   no conditions guarding action 
+
+    CONDITION-ACTION PAIR:
+        ACTION_A:       [r1a1]: luz_gsup_escada.sendCommand(luz_gter_salaestar_escada.state.tostring) 
+
+        CONDITIONS_B:   [r2c1]: if (luz_gsup_escada == luz_gter_salaestar_escada.state.tostring) 
+
+    RESULTING ACTION:
+        ACTION_B:       [r2a1]: luz_gter_salaestar_escada.sendCommand(luz_gsup_escada.state.tostring) 
+
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS ARE CONCURRENTLY ACTIVATED
+    WHILE GUARDING CONDITIONS ARE ENABLED
+    THE CONDITION-ACTION PAIR
+    WILL CAUSE A CHAIN OF ACTION EXECUTIONS.
+
+------------------------------------------------
+

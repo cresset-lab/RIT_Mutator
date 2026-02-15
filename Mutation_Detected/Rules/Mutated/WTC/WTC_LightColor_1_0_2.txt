@@ -1,0 +1,77 @@
+FILE: C:\Users\jason\OneDrive\Documents\TMU\CPS40A\IoT-Mutator-Noura\IoT-Mutator-Noura\Mutation_Output\Rules\Mutated\WTC\WTC_LightColor_1_0_2.rules
+------------------------------------------------
+THREATS DETECTED: 2
+SAC: 0
+WAC: 0
+STC: 0
+WTC: 2
+SCC: 0
+WCC: 0
+------------------------------------------------
+UNCOMMENTED ACTION-ITEM DISCREPANCIES: 5 -- (rules, prolog)
+lamp_colorhsb: (1, 0)
+lamp_colorrgbcwstring: (1, 0)
+lamp_wwdimmer: (1, 0)
+lamp_cwdimmer: (1, 0)
+lamp_power: (2, 0)
+------------------------------------------------
+1. WTC THREAT DETECTED
+    THREAT PAIR: (r1a1, r2t1)
+
+    RULES:
+        RULE_A:         [r1]: ("HSB+CW -> RGBCW")
+        RULE_B:         [r2]: ("RGBCW -> HSB+CW")
+
+    TRIGGER-ACTION PAIR (ACTION_A --> TRIGGER_B):
+        ACTION_A:       [r1a1]: lamp_power.sendCommand(on)
+        TRIGGER_B:      [r2t1]: Item lamp_power received update
+
+    OVERLAPPING GUARDING CONDITIONS:
+        CONDITIONS_A:   [r1c1]: if (receivedcommand instanceof onofftype)
+                    AND [r1c2]: if (receivedcommand == on) 
+        
+        CONDITIONS_B:   [c0]:   no conditions guarding action
+
+    RESULTANT TRIGGER CASCADE (TRIGGER_A --> ACTION_B):
+        TRIGGERS_A:     [r1t1]: Item lamp_colorhsb received command
+                    OR  [r1t2]: Item lamp_cwdimmer received command
+                    OR  [r1t3]: Item lamp_wwdimmer received command
+        ACTION_B:       [r2a1]: lamp_colorhsb.postUpdate(hsb)
+
+    THREAT DESCRIPTION:
+    WHEN INITIAL TRIGGER IS ACTIVATED
+    IF OVERLAPPING SETS OF CONDITIONS ARE CONCURRENTLY ENABLED
+    THE TRIGGER-ACTION PAIR CAUSES A CHAIN OF ACTION EXECUTIONS.
+
+------------------------------------------------
+
+2. WTC THREAT DETECTED
+    THREAT PAIR: (r1a2, r2t1)
+
+    RULES:
+        RULE_A:         [r1]: ("HSB+CW -> RGBCW")
+        RULE_B:         [r2]: ("RGBCW -> HSB+CW")
+
+    TRIGGER-ACTION PAIR (ACTION_A --> TRIGGER_B):
+        ACTION_A:       [r1a2]: lamp_power.sendCommand(off)
+        TRIGGER_B:      [r2t1]: Item lamp_power received update
+
+    OVERLAPPING GUARDING CONDITIONS:
+        CONDITIONS_A:   [r1c1]: if (receivedcommand instanceof onofftype)
+                    AND [r1c3]: if (receivedcommand != on) 
+        
+        CONDITIONS_B:   [c0]:   no conditions guarding action
+
+    RESULTANT TRIGGER CASCADE (TRIGGER_A --> ACTION_B):
+        TRIGGERS_A:     [r1t1]: Item lamp_colorhsb received command
+                    OR  [r1t2]: Item lamp_cwdimmer received command
+                    OR  [r1t3]: Item lamp_wwdimmer received command
+        ACTION_B:       [r2a1]: lamp_colorhsb.postUpdate(hsb)
+
+    THREAT DESCRIPTION:
+    WHEN INITIAL TRIGGER IS ACTIVATED
+    IF OVERLAPPING SETS OF CONDITIONS ARE CONCURRENTLY ENABLED
+    THE TRIGGER-ACTION PAIR CAUSES A CHAIN OF ACTION EXECUTIONS.
+
+------------------------------------------------
+

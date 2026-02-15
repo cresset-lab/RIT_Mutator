@@ -1,0 +1,74 @@
+FILE: C:\Users\jason\OneDrive\Documents\TMU\CPS40A\IoT-Mutator-Noura\IoT-Mutator-Noura\Mutation_Output\Rules\Mutated\SCC\SCC_MiLight_1_3_1.rules
+------------------------------------------------
+THREATS DETECTED: 2
+SAC: 0
+WAC: 1
+STC: 0
+WTC: 0
+SCC: 1
+WCC: 0
+------------------------------------------------
+UNCOMMENTED ACTION-ITEM DISCREPANCIES: 2 -- (rules, prolog)
+milight_id1_g1_light: (2, 0)
+milight_id1_g1_state: (1, 0)
+------------------------------------------------
+1. WAC THREAT DETECTED
+    THREAT PAIR: (r1a2, r2a1)
+    
+    RULES:
+        RULE_A [r1]: ("2 - Milight_ID1_G1_BRIGHT")
+        RULE_B [r2]: ("4 - Milight_ID1_G1_HUE")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: Item milight_id1_g1_brightness received command 
+        
+        TRIGGERS_B:     [r2t1]: Item milight_id1_g1_hue received command
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [c0]:   no conditions guarding action 
+        
+        CONDITIONS_B:   [r2c1]: if (milight_id1_g1_state == on)
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r1a2]: milight_id1_g1_light.sendCommand('{"state":"ON","level":' + ilevel + '}')
+        ACTION_B:       [r2a1]: milight_id1_g1_light.sendCommand('{"state":"ON","level":' + ilevel + ',"hue":' + ihue + ',"saturation":' + isat + '}')
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+2. SCC THREAT DETECTED
+    THREAT PAIR: (r1a1, r2c1)
+
+    RULES:
+        RULE_A:         [r1]: ("2 - Milight_ID1_G1_BRIGHT")
+        RULE_B:         [r2]: ("4 - Milight_ID1_G1_HUE")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: Item milight_id1_g1_brightness received command 
+        
+        TRIGGERS_B:     [r2t1]: Item milight_id1_g1_hue received command
+
+    GUARDING CONDITIONS:
+        CONDITIONS_A:   [r1c1]: if (milight_id1_g1_state == off) 
+
+    CONDITION-ACTION PAIR:
+        ACTION_A:       [r1a1]: milight_id1_g1_state.postUpdate(on) 
+
+        CONDITIONS_B:   [r2c1]: if (milight_id1_g1_state == on) 
+
+    RESULTING ACTION:
+        ACTION_B:       [r2a1]: milight_id1_g1_light.sendCommand('{"state":"ON","level":' + ilevel + ',"hue":' + ihue + ',"saturation":' + isat + '}') 
+
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS ARE CONCURRENTLY ACTIVATED
+    WHILE GUARDING CONDITIONS ARE ENABLED
+    THE CONDITION-ACTION PAIR
+    WILL CAUSE A CHAIN OF ACTION EXECUTIONS.
+
+------------------------------------------------
+

@@ -1,0 +1,38 @@
+FILE: C:\Users\jason\OneDrive\Documents\TMU\CPS40A\IoT-Mutator-Noura\IoT-Mutator-Noura\Mutation_Output\Rules\Mutated\SAC\SAC_3DPrinter_1_0_1.rules
+------------------------------------------------
+THREATS DETECTED: 1
+SAC: 1
+WAC: 0
+STC: 0
+WTC: 0
+SCC: 0
+WCC: 0
+------------------------------------------------
+UNCOMMENTED ACTION-ITEM DISCREPANCIES: 3 -- (rules, prolog)
+octoprintjobprintetastring: (2, 0)
+octoprintjobprintetadatetime: (1, 0)
+octoprintjobprinttimeleftstring: (1, 0)
+------------------------------------------------
+1. SAC THREAT DETECTED
+    THREAT PAIR: (r1a2, r2a1)
+    
+    RULES:
+        RULE_A [r1]: ("1 Time Left String")
+        RULE_B [r2]: ("0 Time Printed String")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: Item octoprintjobprinttimeleft changed 
+        
+        TRIGGERS_B:     [r2t1]: Item octoprintjobprinttime changed
+    
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r1a2]: octoprintjobprintetastring.postUpdate(octoprinteta.tostring)
+        ACTION_B:       [r2a1]: octoprintjobprintetastring.postUpdate(formattedtime)
+    
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+

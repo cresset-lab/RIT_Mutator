@@ -1,0 +1,80 @@
+FILE: C:\Users\jason\OneDrive\Documents\TMU\CPS40A\IoT-Mutator-Noura\IoT-Mutator-Noura\Mutation_Output\Rules\Mutated\WAC\WAC_irrigation_0_6_5.rules
+------------------------------------------------
+THREATS DETECTED: 2
+SAC: 0
+WAC: 2
+STC: 0
+WTC: 0
+SCC: 0
+WCC: 0
+------------------------------------------------
+UNCOMMENTED ACTION-ITEM DISCREPANCIES: 12 -- (rules, prolog)
+sumrainlast24h: (1, 0)
+irrigationvalvezone2time: (1, 0)
+irrigationvalvezone4time: (1, 0)
+irrigationstartatspecifichour: (1, 0)
+sumrainnext24h: (1, 0)
+irrigationcurrentvalve: (1, 0)
+maxallowedwindspeed: (1, 0)
+maxallowedrain: (1, 0)
+irrigationstarttime: (1, 0)
+irrigationvalvezone3time: (1, 0)
+irrigationhoursbeforesunrise: (3, 0)
+irrigationvalvezone1time: (1, 0)
+------------------------------------------------
+1. WAC THREAT DETECTED
+    THREAT PAIR: (r1a5, r2a1)
+    
+    RULES:
+        RULE_A [r1]: ("1 Irrigation - system start")
+        RULE_B [r2]: ("7 - Irrigation - protection timer off, close all valves")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: System started 
+        
+        TRIGGERS_B:     [r2t1]: Item irrigationtimermax changed to off
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [r1c5]: if (irrigationhoursbeforesunrise == null) 
+        
+        CONDITIONS_B:   [c0]:   no conditions guarding action
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r1a5]: irrigationhoursbeforesunrise.sendCommand(1)
+        ACTION_B:       [r2a1]: irrigationhoursbeforesunrise.sendCommand(off)
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+2. WAC THREAT DETECTED
+    THREAT PAIR: (r1a12, r2a1)
+    
+    RULES:
+        RULE_A [r1]: ("1 Irrigation - system start")
+        RULE_B [r2]: ("7 - Irrigation - protection timer off, close all valves")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: System started 
+        
+        TRIGGERS_B:     [r2t1]: Item irrigationtimermax changed to off
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [r1c12]: if (irrigationhoursbeforesunrise == null) 
+        
+        CONDITIONS_B:   [c0]:   no conditions guarding action
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r1a12]: irrigationhoursbeforesunrise.sendCommand(1)
+        ACTION_B:       [r2a1]: irrigationhoursbeforesunrise.sendCommand(off)
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+

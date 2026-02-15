@@ -1,0 +1,49 @@
+FILE: C:\Users\jason\OneDrive\Documents\TMU\CPS40A\IoT-Mutator-Noura\IoT-Mutator-Noura\Mutation_Output\Rules\Mutated\WCC\WCC_OwnTracks_4_1_2.rules
+------------------------------------------------
+THREATS DETECTED: 1
+SAC: 0
+WAC: 0
+STC: 0
+WTC: 0
+SCC: 0
+WCC: 1
+------------------------------------------------
+UNCOMMENTED ACTION-ITEM DISCREPANCIES: 8 -- (rules, prolog)
+josh_moving: (1, 0)
+mqttjoshbattery: (1, 0)
+joshdistancefromhome: (1, 0)
+mqttjoshaccuracy: (1, 0)
+locationjosh: (1, 0)
+mqttjoshlongitude: (1, 0)
+josh: (1, 0)
+mqttjoshlatitude: (1, 0)
+------------------------------------------------
+1. WCC THREAT DETECTED
+    THREAT PAIR: (r1a1, r2c2)
+
+    RULES:
+        RULE_A:         [r1]: ("5 - Josh leaves home")
+        RULE_B:         [r2]: ("2 - MqttPostionParseJosh")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: Item phone_josh received update off 
+        
+        TRIGGERS_B:     [r2t1]: Item mqttpositionjoshraw changed
+
+    GUARDING CONDITIONS:
+        CONDITIONS_A:   [c0]:   no conditions guarding action 
+
+    CONDITION-ACTION PAIR:
+        ACTION_A:       [r1a1]: josh.postUpdate("Away") 
+
+        CONDITION_B:     [r2c2]: if (josh == "Away")
+
+    
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS ARE CONCURRENTLY ACTIVATED
+    WHILE GUARDING CONDITIONS ARE ENABLED
+    THE CONDITION-ACTION PAIR
+    MAY CAUSE UNEXPECTED BEHAVIOUR.
+
+------------------------------------------------
+

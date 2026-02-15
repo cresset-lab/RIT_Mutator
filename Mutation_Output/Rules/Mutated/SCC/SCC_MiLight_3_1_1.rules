@@ -1,0 +1,22 @@
+rule "4 - Milight_ID1_G1_HUE"
+when
+    Item Milight_ID1_G1_Hue received command
+then
+    var iHUE = Math :: round((receivedCommand as HSBType).getHue.intValue)
+    var iSAT = Math :: round((receivedCommand as HSBType).getSaturation.intValue)
+    var iLEVEL = Math :: round((receivedCommand as HSBType).getBrightness.intValue)
+    Milight_ID1_G1_Light.sendCommand('{"state":"ON","level":' + iLEVEL + ',"hue":' + iHUE + ',"saturation":' + iSAT + '}')
+
+end
+
+rule "2 - Milight_ID1_G1_BRIGHT"
+when
+    Item Milight_ID1_G1_Brightness received command
+then
+    var iLEVEL = (receivedCommand as PercentType).intValue
+    if (Milight_ID1_G1_State.state == OFF)
+        Milight_ID1_G1_State.postUpdate(ON)
+    if (Milight_ID1_G1_Light.state == '{"state":"ON","level":' + iLEVEL + ',"hue":' + iHUE + ',"saturation":' + iSAT + '}')
+        Milight_ID1_G1_Light.sendCommand('{"state":"ON","level":' + iLEVEL + '}')
+
+end

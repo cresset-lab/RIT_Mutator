@@ -1,0 +1,73 @@
+FILE: C:\Users\jason\OneDrive\Documents\TMU\CPS40A\IoT-Mutator-Noura\IoT-Mutator-Noura\Mutation_Output\Rules\Mutated\WAC\WAC_WateringSystem_5_0_1.rules
+------------------------------------------------
+THREATS DETECTED: 2
+SAC: 0
+WAC: 2
+STC: 0
+WTC: 0
+SCC: 0
+WCC: 0
+------------------------------------------------
+UNCOMMENTED ACTION-ITEM DISCREPANCIES: 3 -- (rules, prolog)
+wtrvalveback: (1, 0)
+wtrvalveline: (1, 0)
+notification_proxy_wtr: (3, 0)
+------------------------------------------------
+1. WAC THREAT DETECTED
+    THREAT PAIR: (r1a1, r2a1)
+    
+    RULES:
+        RULE_A [r1]: ("6 Watering_manual_start/stop")
+        RULE_B [r2]: ("1 Watering_garden_startup")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: Item wtrstartbtn changed to closed
+                    OR  [r1t2]: Item wtrstartbtn changed to closed 
+        
+        TRIGGERS_B:     [r2t1]: System started
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [r1c1]: if (iswatering == false) 
+        
+        CONDITIONS_B:   [c0]:   no conditions guarding action
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r1a1]: notification_proxy_wtr.sendCommand("START")
+        ACTION_B:       [r2a1]: notification_proxy_wtr.sendCommand(off_r)
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+2. WAC THREAT DETECTED
+    THREAT PAIR: (r1a2, r2a1)
+    
+    RULES:
+        RULE_A [r1]: ("6 Watering_manual_start/stop")
+        RULE_B [r2]: ("1 Watering_garden_startup")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: Item wtrstartbtn changed to closed
+                    OR  [r1t2]: Item wtrstartbtn changed to closed 
+        
+        TRIGGERS_B:     [r2t1]: System started
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [r1c2]: if (iswatering != false) 
+        
+        CONDITIONS_B:   [c0]:   no conditions guarding action
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r1a2]: notification_proxy_wtr.sendCommand("STOP")
+        ACTION_B:       [r2a1]: notification_proxy_wtr.sendCommand(off_r)
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+

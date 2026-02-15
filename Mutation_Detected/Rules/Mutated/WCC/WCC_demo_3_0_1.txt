@@ -1,0 +1,79 @@
+FILE: C:\Users\jason\OneDrive\Documents\TMU\CPS40A\IoT-Mutator-Noura\IoT-Mutator-Noura\Mutation_Output\Rules\Mutated\WCC\WCC_demo_3_0_1.rules
+------------------------------------------------
+THREATS DETECTED: 2
+SAC: 0
+WAC: 0
+STC: 0
+WTC: 0
+SCC: 0
+WCC: 2
+------------------------------------------------
+UNCOMMENTED ACTION-ITEM DISCREPANCIES: 3 -- (rules, prolog)
+weather_temp_min: (1, 0)
+weather_temp_max: (1, 0)
+dimmedlight: (1, 0)
+------------------------------------------------
+1. WCC THREAT DETECTED
+    THREAT PAIR: (r1a1, r2c13)
+
+    RULES:
+        RULE_A:         [r1]: ("8 - Set daily max and min temperature")
+        RULE_B:         [r2]: ("1 - Dimmed Light")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: Item weather_temperature changed
+                    OR  [r1t2]: Time cron 0 0 0 * * ?
+                    OR  [r1t3]: System started 
+        
+        TRIGGERS_B:     [r2t1]: Item dimmedlight received command
+
+    GUARDING CONDITIONS:
+        CONDITIONS_A:   [r1c1]: if (min !== null)
+                    AND [r1c2]: if (max !== null) 
+
+    CONDITION-ACTION PAIR:
+        ACTION_A:       [r1a1]: weather_temp_max.postUpdate(max.state) 
+
+        CONDITION_B:     [r2c13]: if (weather_temp_max == max.state)
+
+    
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS ARE CONCURRENTLY ACTIVATED
+    WHILE GUARDING CONDITIONS ARE ENABLED
+    THE CONDITION-ACTION PAIR
+    MAY CAUSE UNEXPECTED BEHAVIOUR.
+
+------------------------------------------------
+
+2. WCC THREAT DETECTED
+    THREAT PAIR: (r1a1, r2c14)
+
+    RULES:
+        RULE_A:         [r1]: ("8 - Set daily max and min temperature")
+        RULE_B:         [r2]: ("1 - Dimmed Light")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: Item weather_temperature changed
+                    OR  [r1t2]: Time cron 0 0 0 * * ?
+                    OR  [r1t3]: System started 
+        
+        TRIGGERS_B:     [r2t1]: Item dimmedlight received command
+
+    GUARDING CONDITIONS:
+        CONDITIONS_A:   [r1c1]: if (min !== null)
+                    AND [r1c2]: if (max !== null) 
+
+    CONDITION-ACTION PAIR:
+        ACTION_A:       [r1a1]: weather_temp_max.postUpdate(max.state) 
+
+        CONDITION_B:     [r2c14]: if (weather_temp_max == max.state)
+
+    
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS ARE CONCURRENTLY ACTIVATED
+    WHILE GUARDING CONDITIONS ARE ENABLED
+    THE CONDITION-ACTION PAIR
+    MAY CAUSE UNEXPECTED BEHAVIOUR.
+
+------------------------------------------------
+

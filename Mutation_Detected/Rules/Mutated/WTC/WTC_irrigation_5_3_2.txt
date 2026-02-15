@@ -1,0 +1,69 @@
+FILE: C:\Users\jason\OneDrive\Documents\TMU\CPS40A\IoT-Mutator-Noura\IoT-Mutator-Noura\Mutation_Output\Rules\Mutated\WTC\WTC_irrigation_5_3_2.rules
+------------------------------------------------
+THREATS DETECTED: 2
+SAC: 0
+WAC: 0
+STC: 0
+WTC: 2
+SCC: 0
+WCC: 0
+------------------------------------------------
+UNCOMMENTED ACTION-ITEM DISCREPANCIES: 2 -- (rules, prolog)
+irrigationsectionremainingtime: (1, 0)
+irrigationtimermax: (2, 0)
+------------------------------------------------
+1. WTC THREAT DETECTED
+    THREAT PAIR: (r1a1, r2t1)
+
+    RULES:
+        RULE_A:         [r1]: ("6 - Irrigation - valve updated, turn on the timer")
+        RULE_B:         [r2]: ("4 - Irrigation - update timer")
+
+    TRIGGER-ACTION PAIR (ACTION_A --> TRIGGER_B):
+        ACTION_A:       [r1a1]: irrigationtimermax.sendCommand(on)
+        TRIGGER_B:      [r2t1]: Item irrigationtimermax changed
+
+    OVERLAPPING GUARDING CONDITIONS:
+        CONDITIONS_A:   [r1c1]: if (groupirrigationvalves == on)
+                    AND [r1c3]: if (irrigationtimermax == off) 
+        
+        CONDITIONS_B:   [r2c1]: if (irrigationsectionremainingtime.state as number > 0)
+
+    RESULTANT TRIGGER CASCADE (TRIGGER_A --> ACTION_B):
+        TRIGGERS_A:     [r1t1]: Item groupirrigationvalves changed
+        ACTION_B:       [r2a1]: irrigationsectionremainingtime.postUpdate((irrigationsectionremainingtime.state as number) - 1)
+
+    THREAT DESCRIPTION:
+    WHEN INITIAL TRIGGER IS ACTIVATED
+    IF OVERLAPPING SETS OF CONDITIONS ARE CONCURRENTLY ENABLED
+    THE TRIGGER-ACTION PAIR CAUSES A CHAIN OF ACTION EXECUTIONS.
+
+------------------------------------------------
+
+2. WTC THREAT DETECTED
+    THREAT PAIR: (r1a2, r2t1)
+
+    RULES:
+        RULE_A:         [r1]: ("6 - Irrigation - valve updated, turn on the timer")
+        RULE_B:         [r2]: ("4 - Irrigation - update timer")
+
+    TRIGGER-ACTION PAIR (ACTION_A --> TRIGGER_B):
+        ACTION_A:       [r1a2]: irrigationtimermax.postUpdate(off)
+        TRIGGER_B:      [r2t1]: Item irrigationtimermax changed
+
+    OVERLAPPING GUARDING CONDITIONS:
+        CONDITIONS_A:   [r1c2]: if (groupirrigationvalves != on) 
+        
+        CONDITIONS_B:   [r2c1]: if (irrigationsectionremainingtime.state as number > 0)
+
+    RESULTANT TRIGGER CASCADE (TRIGGER_A --> ACTION_B):
+        TRIGGERS_A:     [r1t1]: Item groupirrigationvalves changed
+        ACTION_B:       [r2a1]: irrigationsectionremainingtime.postUpdate((irrigationsectionremainingtime.state as number) - 1)
+
+    THREAT DESCRIPTION:
+    WHEN INITIAL TRIGGER IS ACTIVATED
+    IF OVERLAPPING SETS OF CONDITIONS ARE CONCURRENTLY ENABLED
+    THE TRIGGER-ACTION PAIR CAUSES A CHAIN OF ACTION EXECUTIONS.
+
+------------------------------------------------
+

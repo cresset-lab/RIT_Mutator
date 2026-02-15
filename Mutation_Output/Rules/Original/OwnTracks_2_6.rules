@@ -1,0 +1,18 @@
+rule "3 - System Start"
+when
+        System started
+then
+        if(phone_Josh.state == ON){
+                postUpdate(josh, "Home")
+        }
+        else if (phone_Josh_Work.state == ON)
+                postUpdate(josh, "Work")
+        else postUpdate(josh, "Away")
+end
+
+rule "7 - Josh leaves work in Afternoon"
+when
+        Item phone_Josh_Work received update OFF
+then
+        postUpdate(josh, "Away")
+end

@@ -1,0 +1,17 @@
+rule "4 Wtr_auto_ON" 
+	when
+		Item WtrAuto changed from OPEN to CLOSED or
+        Item WtrAuto changed from NULL to CLOSED
+	then
+		logInfo("Watering mode is set to automatic")
+end
+
+rule "2 Rain_sensor_rain_activated"
+    when
+	    Item RainSensor changed from CLOSED to OPEN or
+        Item RainSensor changed from NULL to OPEN
+    then
+    	logInfo( "FILE", "Rain_sensor_rain_detected: Rain detected, stopping watering if running")
+    	logInfo("Rain sensor is wet")
+    	Notification_Proxy_Wtr.sendCommand("STOP")
+end

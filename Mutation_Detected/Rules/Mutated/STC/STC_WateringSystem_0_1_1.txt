@@ -1,0 +1,39 @@
+FILE: C:\Users\jason\OneDrive\Documents\TMU\CPS40A\IoT-Mutator-Noura\IoT-Mutator-Noura\Mutation_Output\Rules\Mutated\STC\STC_WateringSystem_0_1_1.rules
+------------------------------------------------
+THREATS DETECTED: 1
+SAC: 0
+WAC: 0
+STC: 1
+WTC: 0
+SCC: 0
+WCC: 0
+------------------------------------------------
+UNCOMMENTED ACTION-ITEM DISCREPANCIES: 4 -- (rules, prolog)
+wtrvalveline: (1, 0)
+wtrvalveback: (1, 0)
+wtrvalvefront: (1, 0)
+notification_proxy_wtr: (1, 0)
+------------------------------------------------
+1. STC THREAT DETECTED
+    THREAT PAIR: (r1a1, r2t1)
+
+    RULES:
+        RULE_A [r1]: ("1 Watering_garden_startup")
+        RULE_B [r2]: ("2 Rain_sensor_rain_activated")
+
+    TRIGGER-ACTION PAIR (ACTION_A --> TRIGGER_B):
+        ACTION_A:       [r1a1]: wtrvalvefront.sendCommand(off_r)
+        TRIGGER_B:      [r2t1]: Item wtrvalvefront changed
+        
+    RESULTANT TRIGGER CASCADE (TRIGGER_A --> ACTION_B):
+        TRIGGERS_A:     [r1t1]: System started
+        ACTION_B:       [r2a1]: notification_proxy_wtr.sendCommand("STOP")
+    
+
+    THREAT DESCRIPTION:
+    WHEN INITIAL TRIGGER IS ACTIVATED
+    THE TRIGGER-ACTION PAIR CAUSES 
+    A CHAIN OF ACTION EXECUTIONS.
+
+------------------------------------------------
+

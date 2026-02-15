@@ -1,0 +1,20 @@
+rule "11 - Set random image URLs"
+when
+    Time cron "/10 * * * * ?"
+then
+    val url = urlList.get(random.nextInt(urlList.length))
+    val res = resList.get(random.nextInt(resList.length))
+
+    postUpdate(ImageURL, url + "/" + res)
+end
+
+rule "13 - Select Radio Station"
+when
+    Item Radio_Station received command
+then
+    switch(receivedCommand) {
+        case 0 : playStream(null)
+        case 1 : playStream("http:
+        case 2 : playStream("http:
+    }
+end

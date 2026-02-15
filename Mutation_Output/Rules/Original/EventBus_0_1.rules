@@ -1,0 +1,15 @@
+rule "Publish commands to the event bus"
+when
+    Member of PubItems_CMD received command 
+then
+    val mqttActions = getActions("mqtt",eb_br) 
+    mqttActions.publishMQTT(eb_name+"/out/"+triggeringItem.name+"/command",receivedCommand.toString)
+end
+
+rule "Publish updates to the event bus"
+when
+    Member of PubItems_UPD received update 
+then
+    val mqttActions = getActions("mqtt",eb_br)
+    mqttActions.publishMQTT(eb_name+"/out/"+triggeringItem.name+"/state",triggeringItem.state.toString)
+end

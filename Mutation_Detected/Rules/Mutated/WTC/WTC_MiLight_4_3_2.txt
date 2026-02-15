@@ -1,0 +1,17 @@
+FILE: C:\Users\jason\OneDrive\Documents\TMU\CPS40A\IoT-Mutator-Noura\IoT-Mutator-Noura\Mutation_Output\Rules\Mutated\WTC\WTC_MiLight_4_3_2.rules
+------------------------------------------------
+THREATS DETECTED: 0
+SAC: 0
+WAC: 0
+STC: 0
+WTC: 0
+SCC: 0
+WCC: 0
+------------------------------------------------
+UNCOMMENTED ACTION-ITEM DISCREPANCIES: 5 -- (rules, prolog)
+milight_id1_g1_light: (1, 0)
+milight_id1_g1_state: (1, 0)
+milight_id1_g1_brightness: (2, 0)
+milight_id1_g1_ctemp: (1, 0)
+milight_id1_g1_hue: (1, 0)
+------------------------------------------------

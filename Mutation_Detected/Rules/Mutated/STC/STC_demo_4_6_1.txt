@@ -1,0 +1,37 @@
+FILE: C:\Users\jason\OneDrive\Documents\TMU\CPS40A\IoT-Mutator-Noura\IoT-Mutator-Noura\Mutation_Output\Rules\Mutated\STC\STC_demo_4_6_1.rules
+------------------------------------------------
+THREATS DETECTED: 1
+SAC: 0
+WAC: 0
+STC: 1
+WTC: 0
+SCC: 0
+WCC: 0
+------------------------------------------------
+UNCOMMENTED ACTION-ITEM DISCREPANCIES: 2 -- (rules, prolog)
+imageurl: (1, 0)
+weather_lastupdate: (1, 0)
+------------------------------------------------
+1. STC THREAT DETECTED
+    THREAT PAIR: (r1a1, r2t1)
+
+    RULES:
+        RULE_A [r1]: ("9 - Records last weather update time")
+        RULE_B [r2]: ("11 - Set random image URLs")
+
+    TRIGGER-ACTION PAIR (ACTION_A --> TRIGGER_B):
+        ACTION_A:       [r1a1]: weather_lastupdate.postUpdate(new datetimetype ())
+        TRIGGER_B:      [r2t1]: Item weather_lastupdate changed
+        
+    RESULTANT TRIGGER CASCADE (TRIGGER_A --> ACTION_B):
+        TRIGGERS_A:     [r1t1]: Item weather_temperature received update
+        ACTION_B:       [r2a1]: imageurl.postUpdate(url + "/" + res)
+    
+
+    THREAT DESCRIPTION:
+    WHEN INITIAL TRIGGER IS ACTIVATED
+    THE TRIGGER-ACTION PAIR CAUSES 
+    A CHAIN OF ACTION EXECUTIONS.
+
+------------------------------------------------
+

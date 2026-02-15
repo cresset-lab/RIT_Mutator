@@ -1,0 +1,45 @@
+FILE: C:\Users\jason\OneDrive\Documents\TMU\CPS40A\IoT-Mutator-Noura\IoT-Mutator-Noura\Mutation_Output\Rules\Mutated\STC\STC_LightingScene_2_1_2.rules
+------------------------------------------------
+THREATS DETECTED: 1
+SAC: 0
+WAC: 0
+STC: 1
+WTC: 0
+SCC: 0
+WCC: 0
+------------------------------------------------
+UNCOMMENTED ACTION-ITEM DISCREPANCIES: 10 -- (rules, prolog)
+scene_evening: (1, 0)
+light_ff_kitchen_sink: (1, 0)
+scene_evening_store: (1, 0)
+ledstrip_group2_power: (1, 0)
+eveninglights: (1, 0)
+ledstrip_group2_color: (1, 0)
+scene_evening_ledstrip_kitchen_cabinet_power: (1, 0)
+scene_evening_light_ff_kitchen_recessed: (1, 0)
+ff_kitchen_recessed: (1, 0)
+scene_evening_ledstrip_kitchen_cabinet_color: (1, 0)
+------------------------------------------------
+1. STC THREAT DETECTED
+    THREAT PAIR: (r1a2, r2t1)
+
+    RULES:
+        RULE_A [r1]: ("Lighting Scene Evening Config Store")
+        RULE_B [r2]: ("Lighting Scene Evening")
+
+    TRIGGER-ACTION PAIR (ACTION_A --> TRIGGER_B):
+        ACTION_A:       [r1a2]: scene_evening_ledstrip_kitchen_cabinet_color.sendCommand(ledstrip_kitchen_cabinet_color.state as hsbtype)
+        TRIGGER_B:      [r2t1]: Item scene_evening_ledstrip_kitchen_cabinet_color received command
+        
+    RESULTANT TRIGGER CASCADE (TRIGGER_A --> ACTION_B):
+        TRIGGERS_A:     [r1t1]: Item scene_evening_store received command on
+        ACTION_B:       [r2a1]: eveninglights.sendCommand(on)
+    
+
+    THREAT DESCRIPTION:
+    WHEN INITIAL TRIGGER IS ACTIVATED
+    THE TRIGGER-ACTION PAIR CAUSES 
+    A CHAIN OF ACTION EXECUTIONS.
+
+------------------------------------------------
+

@@ -1,0 +1,65 @@
+FILE: C:\Users\jason\OneDrive\Documents\TMU\CPS40A\IoT-Mutator-Noura\IoT-Mutator-Noura\Mutation_Output\Rules\Mutated\SAC\SAC_LightingScene_3_0_14.rules
+------------------------------------------------
+THREATS DETECTED: 2
+SAC: 1
+WAC: 0
+STC: 1
+WTC: 0
+SCC: 0
+WCC: 0
+------------------------------------------------
+UNCOMMENTED ACTION-ITEM DISCREPANCIES: 7 -- (rules, prolog)
+scene_night_ledstrip_kitchen_cabinet_power: (1, 0)
+scene_wakeup: (1, 0)
+scene_night_light_ff_kitchen_recessed: (1, 0)
+scene_night_ledstrip_kitchen_cabinet_color: (1, 0)
+scene_night_store: (2, 0)
+light_ff_kitchen_sink: (1, 0)
+light_sf_landing_lamp: (1, 0)
+------------------------------------------------
+1. SAC THREAT DETECTED
+    THREAT PAIR: (r1a4, r2a2)
+    
+    RULES:
+        RULE_A [r1]: ("Lighting Scene Night Config Store")
+        RULE_B [r2]: ("Lighting Scene Wakeup")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: Item scene_night_store received command on 
+        
+        TRIGGERS_B:     [r2t1]: Item scene_wakeup received command on
+    
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r1a4]: scene_night_store.postUpdate(off)
+        ACTION_B:       [r2a2]: scene_night_store.sendCommand(on)
+    
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+2. STC THREAT DETECTED
+    THREAT PAIR: (r2a2, r1t1)
+
+    RULES:
+        RULE_A [r2]: ("Lighting Scene Wakeup")
+        RULE_B [r1]: ("Lighting Scene Night Config Store")
+
+    TRIGGER-ACTION PAIR (ACTION_A --> TRIGGER_B):
+        ACTION_A:       [r2a2]: scene_night_store.sendCommand(on)
+        TRIGGER_B:      [r1t1]: Item scene_night_store received command on
+        
+    RESULTANT TRIGGER CASCADE (TRIGGER_A --> ACTION_B):
+        TRIGGERS_A:     [r2t1]: Item scene_wakeup received command on
+        ACTION_B:       [r1a1]: scene_night_ledstrip_kitchen_cabinet_power.sendCommand(ledstrip_kitchen_cabinet_power.state as onofftype)
+    
+
+    THREAT DESCRIPTION:
+    WHEN INITIAL TRIGGER IS ACTIVATED
+    THE TRIGGER-ACTION PAIR CAUSES 
+    A CHAIN OF ACTION EXECUTIONS.
+
+------------------------------------------------
+

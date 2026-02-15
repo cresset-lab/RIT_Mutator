@@ -1,0 +1,18 @@
+rule "1 - Milight_ID1_G1_ONOFF"
+when
+    Item Milight_ID1_G1_State received command
+then
+    Milight_ID1_G1_Light.sendCommand('{"state":"' + receivedCommand + '"}')
+
+end
+
+rule "2 - Milight_ID1_G1_BRIGHT"
+when
+    Item Milight_ID1_G1_Brightness received command
+then
+    var iLEVEL = (receivedCommand as PercentType).intValue
+    if (Milight_ID1_G1_State.state == OFF)
+        Milight_ID1_G1_State.postUpdate(ON)
+    Milight_ID1_G1_Light.sendCommand('{"state":"ON","level":' + iLEVEL + '}')
+
+end

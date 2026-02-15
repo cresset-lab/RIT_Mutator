@@ -1,0 +1,128 @@
+FILE: C:\Users\jason\OneDrive\Documents\TMU\CPS40A\IoT-Mutator-Noura\IoT-Mutator-Noura\Mutation_Output\Rules\Mutated\SAC\SAC_WateringSystem_1_6_1.rules
+------------------------------------------------
+THREATS DETECTED: 4
+SAC: 1
+WAC: 3
+STC: 0
+WTC: 0
+SCC: 0
+WCC: 0
+------------------------------------------------
+UNCOMMENTED ACTION-ITEM DISCREPANCIES: 6 -- (rules, prolog)
+notification_proxy_wtr: (2, 0)
+wtrvalveline: (3, 0)
+wtrlastdate: (1, 0)
+wtrvalveback: (3, 0)
+wtrvalvefront: (2, 0)
+wtrled: (3, 0)
+------------------------------------------------
+1. SAC THREAT DETECTED
+    THREAT PAIR: (r1a3, r2a4)
+    
+    RULES:
+        RULE_A [r1]: ("1 Watering_garden_startup")
+        RULE_B [r2]: ("7 Watering_starting/stoping")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: System started 
+        
+        TRIGGERS_B:     [r2t1]: Item notification_proxy_wtr received update
+    
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r1a3]: wtrvalveline.sendCommand(off_r)
+        ACTION_B:       [r2a4]: wtrvalveline.sendCommand(off)
+    
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+2. WAC THREAT DETECTED
+    THREAT PAIR: (r1a1, r2a7)
+    
+    RULES:
+        RULE_A [r1]: ("1 Watering_garden_startup")
+        RULE_B [r2]: ("7 Watering_starting/stoping")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: System started 
+        
+        TRIGGERS_B:     [r2t1]: Item notification_proxy_wtr received update
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [c0]:   no conditions guarding action 
+        
+        CONDITIONS_B:   [r2c8]: if (msg == "START")
+                    AND [r2c9]: if (wtrfronttime > 0)
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r1a1]: wtrvalvefront.sendCommand(off_r)
+        ACTION_B:       [r2a7]: wtrvalvefront.sendCommand(on_r)
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+3. WAC THREAT DETECTED
+    THREAT PAIR: (r1a2, r2a9)
+    
+    RULES:
+        RULE_A [r1]: ("1 Watering_garden_startup")
+        RULE_B [r2]: ("7 Watering_starting/stoping")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: System started 
+        
+        TRIGGERS_B:     [r2t1]: Item notification_proxy_wtr received update
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [c0]:   no conditions guarding action 
+        
+        CONDITIONS_B:   [r2c8]: if (msg == "START")
+                    AND [r2c10]: if (wtrbacktime > 0)
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r1a2]: wtrvalveback.sendCommand(off_r)
+        ACTION_B:       [r2a9]: wtrvalveback.sendCommand(on_r)
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+4. WAC THREAT DETECTED
+    THREAT PAIR: (r1a3, r2a11)
+    
+    RULES:
+        RULE_A [r1]: ("1 Watering_garden_startup")
+        RULE_B [r2]: ("7 Watering_starting/stoping")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: System started 
+        
+        TRIGGERS_B:     [r2t1]: Item notification_proxy_wtr received update
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [c0]:   no conditions guarding action 
+        
+        CONDITIONS_B:   [r2c8]: if (msg == "START")
+                    AND [r2c11]: if (wtrlinetime > 0)
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r1a3]: wtrvalveline.sendCommand(off_r)
+        ACTION_B:       [r2a11]: wtrvalveline.sendCommand(on_r)
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+

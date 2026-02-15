@@ -1,0 +1,16 @@
+rule "5 Wtr_auto_OFF" 
+	when
+		Item WtrAuto changed from CLOSED to OPEN or
+        Item WtrAuto changed from NULL to OPEN
+	then
+		logInfo("Watering mode is set to manual")
+end
+
+rule "3 Rain_sensor_rain_deactivated"
+    when
+	    Item RainSensor changed from OPEN to CLOSED or
+        Item RainSensor changed from NULL to CLOSED
+    then
+   		logInfo( "FILE", "Rain_sensor_rain_detected: Rain detected is dry")
+    	logInfo("Rainsensor is dry")
+end

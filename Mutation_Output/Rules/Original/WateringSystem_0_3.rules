@@ -1,0 +1,36 @@
+rule "1 Watering_garden_startup"
+	when
+		System started		
+	then
+		
+		ON_R = OFF
+		OFF_R = ON
+    	isWatering = false
+    	
+    	
+    	WtrValveFront.sendCommand(OFF_R)
+    	WtrValveBack.sendCommand(OFF_R)
+    	WtrValveLine.sendCommand(OFF_R)
+		
+		
+		createTimer(now.plusSeconds(80)) [| 
+			logInfo( "FILE", "Watering_garden_startup: ================ Wtr param  initialization ================")
+			logInfo( "FILE", "Watering_garden_startup: WtrStartTime       [" + WtrStartTime.state + "]")
+			logInfo( "FILE", "Watering_garden_startup: WtrDurationFront   [" + WtrDurationFront.state + "]")
+			logInfo( "FILE", "Watering_garden_startup: WtrDurationBack    [" + WtrDurationBack.state + "]")
+			logInfo( "FILE", "Watering_garden_startup: WtrDurationLine    [" + WtrDurationLine.state + "]")
+			logInfo( "FILE", "Watering_garden_startup: WtrScaleFactor     [" + WtrScaleFactor.state + "]")
+			logInfo( "FILE", "Watering_garden_startup: WtrAuto            [" + WtrAuto.state + "]")
+			logInfo( "FILE", "Watering_garden_startup: WtrRainSensor      [" + WtrRainSensor.state + "]")
+		   	logInfo( "FILE", "Watering_garden_startup: checkWtrRainSensor [" + checkWtrRainSensor + "]")
+    		logInfo( "FILE", "Watering_garden_startup: checkUserStartTime [" + checkUserStartTime + "]")
+		]
+end
+
+rule "4 Wtr_auto_ON" 
+	when
+		Item WtrAuto changed from OPEN to CLOSED or
+        Item WtrAuto changed from NULL to CLOSED
+	then
+		logInfo("Watering mode is set to automatic")
+end

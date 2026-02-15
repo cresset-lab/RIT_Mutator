@@ -1,0 +1,77 @@
+FILE: C:\Users\jason\OneDrive\Documents\TMU\CPS40A\IoT-Mutator-Noura\IoT-Mutator-Noura\Mutation_Output\Rules\Mutated\WAC\WAC_OwnTracks_1_6_7.rules
+------------------------------------------------
+THREATS DETECTED: 2
+SAC: 0
+WAC: 1
+STC: 0
+WTC: 0
+SCC: 0
+WCC: 1
+------------------------------------------------
+UNCOMMENTED ACTION-ITEM DISCREPANCIES: 7 -- (rules, prolog)
+locationjosh: (1, 0)
+mqttjoshbattery: (1, 0)
+mqttjoshlatitude: (1, 0)
+mqttjoshlongitude: (1, 0)
+mqttjoshaccuracy: (1, 0)
+joshdistancefromhome: (1, 0)
+josh_moving: (2, 0)
+------------------------------------------------
+1. WAC THREAT DETECTED
+    THREAT PAIR: (r1a7, r2a1)
+    
+    RULES:
+        RULE_A [r1]: ("2 - MqttPostionParseJosh")
+        RULE_B [r2]: ("7 - Josh leaves work in Afternoon")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: Item mqttpositionjoshraw changed 
+        
+        TRIGGERS_B:     [r2t1]: Item phone_josh_work received update off
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [r1c2]: if (josh_moving == on)
+                    AND [r1c3]: if (josh_moving_location.distancefrom(locationjosh.state) > 300) 
+        
+        CONDITIONS_B:   [c0]:   no conditions guarding action
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r1a7]: josh_moving.postUpdate(off)
+        ACTION_B:       [r2a1]: josh_moving.postUpdate(on)
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+2. WCC THREAT DETECTED
+    THREAT PAIR: (r2a1, r1c2)
+
+    RULES:
+        RULE_A:         [r2]: ("7 - Josh leaves work in Afternoon")
+        RULE_B:         [r1]: ("2 - MqttPostionParseJosh")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r2t1]: Item phone_josh_work received update off 
+        
+        TRIGGERS_B:     [r1t1]: Item mqttpositionjoshraw changed
+
+    GUARDING CONDITIONS:
+        CONDITIONS_A:   [c0]:   no conditions guarding action 
+
+    CONDITION-ACTION PAIR:
+        ACTION_A:       [r2a1]: josh_moving.postUpdate(on) 
+
+        CONDITION_B:     [r1c2]: if (josh_moving == on)
+
+    
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS ARE CONCURRENTLY ACTIVATED
+    WHILE GUARDING CONDITIONS ARE ENABLED
+    THE CONDITION-ACTION PAIR
+    MAY CAUSE UNEXPECTED BEHAVIOUR.
+
+------------------------------------------------
+

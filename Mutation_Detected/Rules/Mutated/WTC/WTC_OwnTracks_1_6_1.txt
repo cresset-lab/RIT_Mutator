@@ -1,0 +1,47 @@
+FILE: C:\Users\jason\OneDrive\Documents\TMU\CPS40A\IoT-Mutator-Noura\IoT-Mutator-Noura\Mutation_Output\Rules\Mutated\WTC\WTC_OwnTracks_1_6_1.rules
+------------------------------------------------
+THREATS DETECTED: 1
+SAC: 0
+WAC: 0
+STC: 0
+WTC: 1
+SCC: 0
+WCC: 0
+------------------------------------------------
+UNCOMMENTED ACTION-ITEM DISCREPANCIES: 8 -- (rules, prolog)
+josh_moving: (1, 0)
+mqttjoshlatitude: (1, 0)
+locationjosh: (1, 0)
+mqttjoshbattery: (1, 0)
+mqttjoshaccuracy: (1, 0)
+mqttjoshlongitude: (1, 0)
+joshdistancefromhome: (1, 0)
+josh: (1, 0)
+------------------------------------------------
+1. WTC THREAT DETECTED
+    THREAT PAIR: (r1a1, r2t1)
+
+    RULES:
+        RULE_A:         [r1]: ("2 - MqttPostionParseJosh")
+        RULE_B:         [r2]: ("7 - Josh leaves work in Afternoon")
+
+    TRIGGER-ACTION PAIR (ACTION_A --> TRIGGER_B):
+        ACTION_A:       [r1a1]: mqttjoshlatitude.postUpdate(lat)
+        TRIGGER_B:      [r2t1]: Item mqttjoshlatitude received update
+
+    OVERLAPPING GUARDING CONDITIONS:
+        CONDITIONS_A:   [r1c1]: if (type == "location") 
+        
+        CONDITIONS_B:   [c0]:   no conditions guarding action
+
+    RESULTANT TRIGGER CASCADE (TRIGGER_A --> ACTION_B):
+        TRIGGERS_A:     [r1t1]: Item mqttpositionjoshraw changed
+        ACTION_B:       [r2a1]: josh.postUpdate("Away")
+
+    THREAT DESCRIPTION:
+    WHEN INITIAL TRIGGER IS ACTIVATED
+    IF OVERLAPPING SETS OF CONDITIONS ARE CONCURRENTLY ENABLED
+    THE TRIGGER-ACTION PAIR CAUSES A CHAIN OF ACTION EXECUTIONS.
+
+------------------------------------------------
+

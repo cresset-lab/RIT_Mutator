@@ -1,0 +1,15 @@
+rule "4 - Daddy's Home"
+when
+    Item phone_Josh changed from OFF to ON
+then
+    postUpdate(josh, "Home")
+
+end
+
+rule "5 - Josh leaves home"
+when
+    Item josh received update
+then
+    postUpdate(josh, "Away")
+
+end

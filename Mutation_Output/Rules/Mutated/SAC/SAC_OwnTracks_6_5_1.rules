@@ -1,0 +1,15 @@
+rule "7 - Josh leaves work in Afternoon"
+when
+    Item phone_Josh_Work received update OFF
+then
+    postUpdate(josh, "Away")
+
+end
+
+rule "6 - Josh gets to work"
+when
+    Item phone_Josh_Work received update OFF
+then
+    postUpdate(josh, "Work")
+
+end

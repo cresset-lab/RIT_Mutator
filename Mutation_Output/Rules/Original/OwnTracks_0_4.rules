@@ -1,0 +1,12 @@
+rule "1 - Josh Moving switch on"
+when Item josh_moving received update ON
+then
+	josh_moving_location = locationJosh.state
+        logInfo("josh_moving_location updated","josh_moving_location set to" + josh_moving_location)
+end
+
+rule "5 - Josh leaves home"
+when Item phone_Josh received update OFF
+then
+        postUpdate(josh, "Away")
+end

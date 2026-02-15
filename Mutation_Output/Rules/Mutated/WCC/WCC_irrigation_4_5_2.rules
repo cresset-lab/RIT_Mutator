@@ -1,0 +1,32 @@
+rule "5 - Irrigation - all valves closed"
+when
+    Item GroupIrrigationValves changed to OFF
+then
+    logInfo(logName, "All irrigation valves closed")
+    IrrigationCurrentValve.postUpdate(OFF)
+    IrrigationSectionRemainingTime.postUpdate(0)
+
+end
+
+rule "6 - Irrigation - valve updated, turn on the timer"
+when
+    Item GroupIrrigationValves changed to OFF
+then
+    if(GroupIrrigationValves.state==ON)
+        {
+            if(IrrigationTimerMax.state==OFF)
+                {
+                    logDebug(logName, "Irrigation valve open, starting protection timer")
+                    IrrigationTimerMax.sendCommand(ON)
+                }
+            else {
+                logDebug(logName, "Irrigation valve open, timer already started, nothing to do")
+            }
+        }
+    else {
+        logDebug(logName, "All irrigation valves closed, stopping protection timer")
+        if (IrrigationCurrentValve.state == OFF)
+            IrrigationTimerMax.postUpdate(OFF)
+    }
+
+end

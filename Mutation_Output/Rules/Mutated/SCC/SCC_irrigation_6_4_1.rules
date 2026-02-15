@@ -1,0 +1,19 @@
+rule "7 - Irrigation - protection timer off, close all valves"
+when
+    Item IrrigationTimerMax changed to OFF
+then
+    logWarn(logName, "Irrigation protection timer expired - close all valves")
+    valve.sendCommand(OFF)
+
+end
+
+rule "5 - Irrigation - all valves closed"
+when
+    Item GroupIrrigationValves changed to OFF
+then
+    logInfo(logName, "All irrigation valves closed")
+    if (valve.state == OFF)
+        IrrigationCurrentValve.postUpdate(OFF)
+    IrrigationSectionRemainingTime.postUpdate(0)
+
+end

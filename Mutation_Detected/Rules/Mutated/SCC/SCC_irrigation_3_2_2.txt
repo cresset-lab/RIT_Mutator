@@ -1,0 +1,75 @@
+FILE: C:\Users\jason\OneDrive\Documents\TMU\CPS40A\IoT-Mutator-Noura\IoT-Mutator-Noura\Mutation_Output\Rules\Mutated\SCC\SCC_irrigation_3_2_2.rules
+------------------------------------------------
+THREATS DETECTED: 2
+SAC: 0
+WAC: 1
+STC: 0
+WTC: 0
+SCC: 1
+WCC: 0
+------------------------------------------------
+UNCOMMENTED ACTION-ITEM DISCREPANCIES: 3 -- (rules, prolog)
+currvalve: (2, 0)
+irrigationcurrentvalve: (1, 0)
+irrigationsectionremainingtime: (2, 0)
+------------------------------------------------
+1. WAC THREAT DETECTED
+    THREAT PAIR: (r1a1, r2a2)
+    
+    RULES:
+        RULE_A [r1]: ("4 - Irrigation - update timer")
+        RULE_B [r2]: ("3 - Irrigation - cascading")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: Time cron 0 * * ? * * 
+        
+        TRIGGERS_B:     [r2t1]: Item irrigationcurrentvalve received command
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [r1c1]: if (irrigationsectionremainingtime.state as number > 0) 
+        
+        CONDITIONS_B:   [r2c3]: if (irrigationsectionremainingtime == (irrigationsectionremainingtime.state as number) - 1)
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r1a1]: irrigationsectionremainingtime.postUpdate((irrigationsectionremainingtime.state as number) - 1)
+        ACTION_B:       [r2a2]: irrigationsectionremainingtime.postUpdate(valveopentime.intvalue)
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+2. SCC THREAT DETECTED
+    THREAT PAIR: (r1a1, r2c3)
+
+    RULES:
+        RULE_A:         [r1]: ("4 - Irrigation - update timer")
+        RULE_B:         [r2]: ("3 - Irrigation - cascading")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: Time cron 0 * * ? * * 
+        
+        TRIGGERS_B:     [r2t1]: Item irrigationcurrentvalve received command
+
+    GUARDING CONDITIONS:
+        CONDITIONS_A:   [r1c1]: if (irrigationsectionremainingtime.state as number > 0) 
+
+    CONDITION-ACTION PAIR:
+        ACTION_A:       [r1a1]: irrigationsectionremainingtime.postUpdate((irrigationsectionremainingtime.state as number) - 1) 
+
+        CONDITIONS_B:   [r2c3]: if (irrigationsectionremainingtime == (irrigationsectionremainingtime.state as number) - 1) 
+
+    RESULTING ACTION:
+        ACTION_B:       [r2a2]: irrigationsectionremainingtime.postUpdate(valveopentime.intvalue) 
+
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS ARE CONCURRENTLY ACTIVATED
+    WHILE GUARDING CONDITIONS ARE ENABLED
+    THE CONDITION-ACTION PAIR
+    WILL CAUSE A CHAIN OF ACTION EXECUTIONS.
+
+------------------------------------------------
+

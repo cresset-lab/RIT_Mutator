@@ -1,0 +1,42 @@
+FILE: C:\Users\jason\OneDrive\Documents\TMU\CPS40A\IoT-Mutator-Noura\IoT-Mutator-Noura\Mutation_Output\Rules\Mutated\WTC\WTC_irrigation_3_5_1.rules
+------------------------------------------------
+THREATS DETECTED: 1
+SAC: 0
+WAC: 0
+STC: 0
+WTC: 1
+SCC: 0
+WCC: 0
+------------------------------------------------
+UNCOMMENTED ACTION-ITEM DISCREPANCIES: 2 -- (rules, prolog)
+irrigationsectionremainingtime: (1, 0)
+irrigationtimermax: (2, 0)
+------------------------------------------------
+1. WTC THREAT DETECTED
+    THREAT PAIR: (r1a1, r2t1)
+
+    RULES:
+        RULE_A:         [r1]: ("4 - Irrigation - update timer")
+        RULE_B:         [r2]: ("6 - Irrigation - valve updated, turn on the timer")
+
+    TRIGGER-ACTION PAIR (ACTION_A --> TRIGGER_B):
+        ACTION_A:       [r1a1]: irrigationsectionremainingtime.postUpdate((irrigationsectionremainingtime.state as number) - 1)
+        TRIGGER_B:      [r2t1]: Item irrigationsectionremainingtime changed
+
+    OVERLAPPING GUARDING CONDITIONS:
+        CONDITIONS_A:   [r1c1]: if (irrigationsectionremainingtime.state as number > 0) 
+        
+        CONDITIONS_B:   [r2c1]: if (groupirrigationvalves == on)
+                    AND [r2c3]: if (irrigationtimermax == off)
+
+    RESULTANT TRIGGER CASCADE (TRIGGER_A --> ACTION_B):
+        TRIGGERS_A:     [r1t1]: Time cron 0 * * ? * *
+        ACTION_B:       [r2a1]: irrigationtimermax.sendCommand(on)
+
+    THREAT DESCRIPTION:
+    WHEN INITIAL TRIGGER IS ACTIVATED
+    IF OVERLAPPING SETS OF CONDITIONS ARE CONCURRENTLY ENABLED
+    THE TRIGGER-ACTION PAIR CAUSES A CHAIN OF ACTION EXECUTIONS.
+
+------------------------------------------------
+

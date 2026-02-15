@@ -1,0 +1,79 @@
+FILE: C:\Users\jason\OneDrive\Documents\TMU\CPS40A\IoT-Mutator-Noura\IoT-Mutator-Noura\Mutation_Output\Rules\Mutated\WTC\WTC_WateringSystem_7_0_4.rules
+------------------------------------------------
+THREATS DETECTED: 2
+SAC: 0
+WAC: 0
+STC: 0
+WTC: 2
+SCC: 0
+WCC: 0
+------------------------------------------------
+UNCOMMENTED ACTION-ITEM DISCREPANCIES: 6 -- (rules, prolog)
+wtrvalveline: (1, 0)
+wtrvalveback: (1, 0)
+wtrrainfallforecast: (1, 0)
+wtrvalvefront: (1, 0)
+wtrrainfallforecastdate: (1, 0)
+notification_proxy_wtr: (2, 0)
+------------------------------------------------
+1. WTC THREAT DETECTED
+    THREAT PAIR: (r1a3, r2t1)
+
+    RULES:
+        RULE_A:         [r1]: ("8 Watering_algorithm")
+        RULE_B:         [r2]: ("1 Watering_garden_startup")
+
+    TRIGGER-ACTION PAIR (ACTION_A --> TRIGGER_B):
+        ACTION_A:       [r1a3]: notification_proxy_wtr.sendCommand("START")
+        TRIGGER_B:      [r2t1]: Item notification_proxy_wtr changed
+
+    OVERLAPPING GUARDING CONDITIONS:
+        CONDITIONS_A:   [r1c1]: if (iswatering == false)
+                    AND [r1c4]: if (wtrauto == closed)
+                    AND [r1c5]: if (checkwtrrainsensor == false)
+                    AND [r1c8]: if (rainfallmm > minimumreqrainfall)
+                    AND [r1c12]: if (lastwtrdate.isbefore(now.minusdays(maxnowtrdays)) == 0) 
+        
+        CONDITIONS_B:   [c0]:   no conditions guarding action
+
+    RESULTANT TRIGGER CASCADE (TRIGGER_A --> ACTION_B):
+        TRIGGERS_A:     [r1t1]: Time cron 0 0 0/1 1/1 * ? *
+        ACTION_B:       [r2a1]: wtrvalvefront.sendCommand(off_r)
+
+    THREAT DESCRIPTION:
+    WHEN INITIAL TRIGGER IS ACTIVATED
+    IF OVERLAPPING SETS OF CONDITIONS ARE CONCURRENTLY ENABLED
+    THE TRIGGER-ACTION PAIR CAUSES A CHAIN OF ACTION EXECUTIONS.
+
+------------------------------------------------
+
+2. WTC THREAT DETECTED
+    THREAT PAIR: (r1a4, r2t1)
+
+    RULES:
+        RULE_A:         [r1]: ("8 Watering_algorithm")
+        RULE_B:         [r2]: ("1 Watering_garden_startup")
+
+    TRIGGER-ACTION PAIR (ACTION_A --> TRIGGER_B):
+        ACTION_A:       [r1a4]: notification_proxy_wtr.sendCommand("START")
+        TRIGGER_B:      [r2t1]: Item notification_proxy_wtr changed
+
+    OVERLAPPING GUARDING CONDITIONS:
+        CONDITIONS_A:   [r1c1]: if (iswatering == false)
+                    AND [r1c4]: if (wtrauto == closed)
+                    AND [r1c5]: if (checkwtrrainsensor == false)
+                    AND [r1c10]: if (rainfallmm <= minimumreqrainfall) 
+        
+        CONDITIONS_B:   [c0]:   no conditions guarding action
+
+    RESULTANT TRIGGER CASCADE (TRIGGER_A --> ACTION_B):
+        TRIGGERS_A:     [r1t1]: Time cron 0 0 0/1 1/1 * ? *
+        ACTION_B:       [r2a1]: wtrvalvefront.sendCommand(off_r)
+
+    THREAT DESCRIPTION:
+    WHEN INITIAL TRIGGER IS ACTIVATED
+    IF OVERLAPPING SETS OF CONDITIONS ARE CONCURRENTLY ENABLED
+    THE TRIGGER-ACTION PAIR CAUSES A CHAIN OF ACTION EXECUTIONS.
+
+------------------------------------------------
+

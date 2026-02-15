@@ -1,0 +1,76 @@
+FILE: C:\Users\jason\OneDrive\Documents\TMU\CPS40A\IoT-Mutator-Noura\IoT-Mutator-Noura\Mutation_Output\Rules\Mutated\SCC\SCC_LightingScene_1_0_6.rules
+------------------------------------------------
+THREATS DETECTED: 2
+SAC: 1
+WAC: 0
+STC: 0
+WTC: 0
+SCC: 1
+WCC: 0
+------------------------------------------------
+UNCOMMENTED ACTION-ITEM DISCREPANCIES: 9 -- (rules, prolog)
+ff_kitchen_recessed: (1, 0)
+ledstrip_group2_color: (1, 0)
+light_sf_landing_lamp: (1, 0)
+ledstrip_group2_power: (1, 0)
+scene_evening: (1, 0)
+ff_kitchen_island: (1, 0)
+eveninglights: (1, 0)
+light_ff_kitchen_sink: (2, 0)
+scene_wakeup: (1, 0)
+------------------------------------------------
+1. SAC THREAT DETECTED
+    THREAT PAIR: (r1a5, r2a1)
+    
+    RULES:
+        RULE_A [r1]: ("Lighting Scene Evening")
+        RULE_B [r2]: ("Lighting Scene Wakeup")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: Item scene_evening received command on 
+        
+        TRIGGERS_B:     [r2t1]: Item scene_wakeup received command on
+    
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r1a5]: light_ff_kitchen_sink.sendCommand(scene_evening_light_ff_kitchen_sink.state as decimaltype)
+        ACTION_B:       [r2a1]: light_ff_kitchen_sink.sendCommand(25)
+    
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+2. SCC THREAT DETECTED
+    THREAT PAIR: (r1a2, r2c1)
+
+    RULES:
+        RULE_A:         [r1]: ("Lighting Scene Evening")
+        RULE_B:         [r2]: ("Lighting Scene Wakeup")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: Item scene_evening received command on 
+        
+        TRIGGERS_B:     [r2t1]: Item scene_wakeup received command on
+
+    GUARDING CONDITIONS:
+        CONDITIONS_A:   [c0]:   no conditions guarding action 
+
+    CONDITION-ACTION PAIR:
+        ACTION_A:       [r1a2]: ledstrip_group2_power.sendCommand(scene_evening_kitchen_strip_power.state as onofftype) 
+
+        CONDITIONS_B:   [r2c1]: if (ledstrip_group2_power == scene_evening_kitchen_strip_power.state as onofftype) 
+
+    RESULTING ACTION:
+        ACTION_B:       [r2a2]: ff_kitchen_island.sendCommand(25) 
+
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS ARE CONCURRENTLY ACTIVATED
+    WHILE GUARDING CONDITIONS ARE ENABLED
+    THE CONDITION-ACTION PAIR
+    WILL CAUSE A CHAIN OF ACTION EXECUTIONS.
+
+------------------------------------------------
+

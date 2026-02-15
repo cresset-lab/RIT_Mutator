@@ -1,0 +1,63 @@
+// https://community.openhab.org/t/heating-boilerplate-a-universal-temperature-control-solution-with-modes/34843
+
+rule "17:00"
+when
+    Time cron "0 0 17 ? * * *"
+then
+    LR_Heating_PresetTempNormal.postUpdate(21.0)
+    BE_Heating_PresetTempNormal.postUpdate(17.0)
+    BA_Heating_PresetTempNormal.postUpdate(20.0)
+    Heating_UpdateHeaters.sendCommand(ON)
+end
+
+rule "React on heating mode switch, send target temperatures"
+when
+    Item Heating_Mode received update or
+    Item Heating_UpdateHeater received command ON
+then
+    Heating_UpdateHeater.postUpdate(OFF)
+    logInfo("heating_mode.rules", "Heating Mode: " + Heating_Mode.state)
+    switch Heating_Mode.state {
+        case "NORMAL": {
+            LR_Heating_TargetTemp.sendCommand(LR_Heating_PresetTempNormal.state as Number)
+            BE_Heating_TargetTemp.sendCommand(BE_Heating_PresetTempNormal.state as Number)
+            BA_Heating_TargetTemp.sendCommand(BA_Heating_PresetTempNormal.state as Number)
+        }
+        case "PARTY": {
+            LR_Heating_TargetTemp.sendCommand(21.0)
+            BE_Heating_TargetTemp.sendCommand(15.0)
+            BA_Heating_TargetTemp.sendCommand(19.0)
+        }
+        case "SICKDAY": {
+            LR_Heating_TargetTemp.sendCommand(23.0)
+            BE_Heating_TargetTemp.sendCommand(19.0)
+            BA_Heating_TargetTemp.sendCommand(23.0)
+        }
+        case "WEEKEND_TRIP": {
+            LR_Heating_TargetTemp.sendCommand(15.0)
+            BE_Heating_TargetTemp.sendCommand(15.0)
+            BA_Heating_TargetTemp.sendCommand(15.0)
+        }
+        case "AWAY": {
+            LR_Heating_TargetTemp.sendCommand(13.0)
+            BE_Heating_TargetTemp.sendCommand(13.0)
+            BA_Heating_TargetTemp.sendCommand(13.0)
+        }
+        case "OFF_SUMMER": {
+            LR_Heating_TargetTemp.sendCommand(0.0)
+            BE_Heating_TargetTemp.sendCommand(0.0)
+            BA_Heating_TargetTemp.sendCommand(0.0)
+        }
+        default : { logError("heating_mode.rules", "Heating Mode unknown: " + Heating_Mode.state) }
+    }
+end
+
+rule "Initialize uninitialized virtual Items"
+when
+    System started
+then
+    createTimer(now.plusSeconds(180)) [ |
+        if (Heating_Mode.state == NULL) Heating_Mode.postUpdate("NORMAL")
+        Heating_PresetNormal_Group.members.filter[item | item.state == NULL].forEach[item | item.postUpdate(19.0)]
+    ]
+end

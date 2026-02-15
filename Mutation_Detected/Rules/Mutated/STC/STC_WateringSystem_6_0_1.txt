@@ -1,0 +1,183 @@
+FILE: C:\Users\jason\OneDrive\Documents\TMU\CPS40A\IoT-Mutator-Noura\IoT-Mutator-Noura\Mutation_Output\Rules\Mutated\STC\STC_WateringSystem_6_0_1.rules
+------------------------------------------------
+THREATS DETECTED: 6
+SAC: 0
+WAC: 3
+STC: 1
+WTC: 2
+SCC: 0
+WCC: 0
+------------------------------------------------
+UNCOMMENTED ACTION-ITEM DISCREPANCIES: 5 -- (rules, prolog)
+wtrlastdate: (1, 0)
+wtrvalveback: (4, 0)
+wtrvalveline: (4, 0)
+wtrvalvefront: (4, 0)
+wtrled: (3, 0)
+------------------------------------------------
+1. WAC THREAT DETECTED
+    THREAT PAIR: (r1a7, r2a1)
+    
+    RULES:
+        RULE_A [r1]: ("7 Watering_starting/stoping")
+        RULE_B [r2]: ("1 Watering_garden_startup")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: Item notification_proxy_wtr received update 
+        
+        TRIGGERS_B:     [r2t1]: Item wtrvalvefront changed
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [r1c8]: if (msg == "START")
+                    AND [r1c9]: if (wtrfronttime > 0) 
+        
+        CONDITIONS_B:   [c0]:   no conditions guarding action
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r1a7]: wtrvalvefront.sendCommand(on_r)
+        ACTION_B:       [r2a1]: wtrvalvefront.sendCommand(off_r)
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+2. WAC THREAT DETECTED
+    THREAT PAIR: (r1a9, r2a2)
+    
+    RULES:
+        RULE_A [r1]: ("7 Watering_starting/stoping")
+        RULE_B [r2]: ("1 Watering_garden_startup")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: Item notification_proxy_wtr received update 
+        
+        TRIGGERS_B:     [r2t1]: Item wtrvalvefront changed
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [r1c8]: if (msg == "START")
+                    AND [r1c10]: if (wtrbacktime > 0) 
+        
+        CONDITIONS_B:   [c0]:   no conditions guarding action
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r1a9]: wtrvalveback.sendCommand(on_r)
+        ACTION_B:       [r2a2]: wtrvalveback.sendCommand(off_r)
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+3. WAC THREAT DETECTED
+    THREAT PAIR: (r1a11, r2a3)
+    
+    RULES:
+        RULE_A [r1]: ("7 Watering_starting/stoping")
+        RULE_B [r2]: ("1 Watering_garden_startup")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: Item notification_proxy_wtr received update 
+        
+        TRIGGERS_B:     [r2t1]: Item wtrvalvefront changed
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [r1c8]: if (msg == "START")
+                    AND [r1c11]: if (wtrlinetime > 0) 
+        
+        CONDITIONS_B:   [c0]:   no conditions guarding action
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r1a11]: wtrvalveline.sendCommand(on_r)
+        ACTION_B:       [r2a3]: wtrvalveline.sendCommand(off_r)
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+4. STC THREAT DETECTED
+    THREAT PAIR: (r1a1, r2t1)
+
+    RULES:
+        RULE_A [r1]: ("7 Watering_starting/stoping")
+        RULE_B [r2]: ("1 Watering_garden_startup")
+
+    TRIGGER-ACTION PAIR (ACTION_A --> TRIGGER_B):
+        ACTION_A:       [r1a1]: wtrvalvefront.sendCommand(off_r)
+        TRIGGER_B:      [r2t1]: Item wtrvalvefront changed
+        
+    RESULTANT TRIGGER CASCADE (TRIGGER_A --> ACTION_B):
+        TRIGGERS_A:     [r1t1]: Item notification_proxy_wtr received update
+        ACTION_B:       [r2a1]: wtrvalvefront.sendCommand(off_r)
+    
+
+    THREAT DESCRIPTION:
+    WHEN INITIAL TRIGGER IS ACTIVATED
+    THE TRIGGER-ACTION PAIR CAUSES 
+    A CHAIN OF ACTION EXECUTIONS.
+
+------------------------------------------------
+
+5. WTC THREAT DETECTED
+    THREAT PAIR: (r1a7, r2t1)
+
+    RULES:
+        RULE_A:         [r1]: ("7 Watering_starting/stoping")
+        RULE_B:         [r2]: ("1 Watering_garden_startup")
+
+    TRIGGER-ACTION PAIR (ACTION_A --> TRIGGER_B):
+        ACTION_A:       [r1a7]: wtrvalvefront.sendCommand(on_r)
+        TRIGGER_B:      [r2t1]: Item wtrvalvefront changed
+
+    OVERLAPPING GUARDING CONDITIONS:
+        CONDITIONS_A:   [r1c8]: if (msg == "START")
+                    AND [r1c9]: if (wtrfronttime > 0) 
+        
+        CONDITIONS_B:   [c0]:   no conditions guarding action
+
+    RESULTANT TRIGGER CASCADE (TRIGGER_A --> ACTION_B):
+        TRIGGERS_A:     [r1t1]: Item notification_proxy_wtr received update
+        ACTION_B:       [r2a1]: wtrvalvefront.sendCommand(off_r)
+
+    THREAT DESCRIPTION:
+    WHEN INITIAL TRIGGER IS ACTIVATED
+    IF OVERLAPPING SETS OF CONDITIONS ARE CONCURRENTLY ENABLED
+    THE TRIGGER-ACTION PAIR CAUSES A CHAIN OF ACTION EXECUTIONS.
+
+------------------------------------------------
+
+6. WTC THREAT DETECTED
+    THREAT PAIR: (r1a8, r2t1)
+
+    RULES:
+        RULE_A:         [r1]: ("7 Watering_starting/stoping")
+        RULE_B:         [r2]: ("1 Watering_garden_startup")
+
+    TRIGGER-ACTION PAIR (ACTION_A --> TRIGGER_B):
+        ACTION_A:       [r1a8]: wtrvalvefront.sendCommand(off_r)
+        TRIGGER_B:      [r2t1]: Item wtrvalvefront changed
+
+    OVERLAPPING GUARDING CONDITIONS:
+        CONDITIONS_A:   [r1c8]: if (msg == "START")
+                    AND [r1c9]: if (wtrfronttime > 0) 
+        
+        CONDITIONS_B:   [c0]:   no conditions guarding action
+
+    RESULTANT TRIGGER CASCADE (TRIGGER_A --> ACTION_B):
+        TRIGGERS_A:     [r1t1]: Item notification_proxy_wtr received update
+        ACTION_B:       [r2a1]: wtrvalvefront.sendCommand(off_r)
+
+    THREAT DESCRIPTION:
+    WHEN INITIAL TRIGGER IS ACTIVATED
+    IF OVERLAPPING SETS OF CONDITIONS ARE CONCURRENTLY ENABLED
+    THE TRIGGER-ACTION PAIR CAUSES A CHAIN OF ACTION EXECUTIONS.
+
+------------------------------------------------
+

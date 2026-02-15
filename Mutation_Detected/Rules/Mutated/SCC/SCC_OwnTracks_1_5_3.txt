@@ -1,0 +1,20 @@
+FILE: C:\Users\jason\OneDrive\Documents\TMU\CPS40A\IoT-Mutator-Noura\IoT-Mutator-Noura\Mutation_Output\Rules\Mutated\SCC\SCC_OwnTracks_1_5_3.rules
+------------------------------------------------
+THREATS DETECTED: 0
+SAC: 0
+WAC: 0
+STC: 0
+WTC: 0
+SCC: 0
+WCC: 0
+------------------------------------------------
+UNCOMMENTED ACTION-ITEM DISCREPANCIES: 8 -- (rules, prolog)
+josh_moving: (1, 0)
+mqttjoshbattery: (1, 0)
+joshdistancefromhome: (1, 0)
+mqttjoshaccuracy: (1, 0)
+locationjosh: (1, 0)
+mqttjoshlongitude: (1, 0)
+josh: (1, 0)
+mqttjoshlatitude: (1, 0)
+------------------------------------------------

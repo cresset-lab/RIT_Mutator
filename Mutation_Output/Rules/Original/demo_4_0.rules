@@ -1,0 +1,24 @@
+rule "9 - Records last weather update time"
+when
+    Item Weather_Temperature received update
+then
+    postUpdate(Weather_LastUpdate, new DateTimeType())
+end
+
+rule "1 - Dimmed Light"
+when
+    Item DimmedLight received command
+then
+    if ((receivedCommand == INCREASE) || (receivedCommand == DECREASE)) {
+        var Number percent = 0
+        if (DimmedLight.state instanceof DecimalType) percent = DimmedLight.state as DecimalType
+
+        if (receivedCommand == INCREASE) percent = percent + 5
+        if (receivedCommand == DECREASE) percent = percent - 5
+
+        if (percent < 0)   percent = 0
+        if (percent > 100) percent = 100
+        postUpdate(DimmedLight, percent);
+    }
+    var Number percent = 0
+end

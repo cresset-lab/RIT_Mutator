@@ -1,0 +1,25 @@
+rule "3 Rain_sensor_rain_deactivated"
+    when
+	    Item RainSensor changed from OPEN to CLOSED or
+        Item RainSensor changed from NULL to CLOSED
+    then
+   		logInfo( "FILE", "Rain_sensor_rain_detected: Rain detected is dry")
+    	logInfo("Rainsensor is dry")
+end
+
+rule "6 Watering_manual_start/stop"
+    when
+	    Item WtrStartBtn changed from OPEN to CLOSED or
+        Item WtrStartBtn changed from NULL to CLOSED
+    then
+		
+    	if ( isWatering == false ) {
+    		logInfo( "FILE", "Watering_manual_start/stop: Start watering, manual activation")
+    		logInfo("User pressed button START watering")
+    		Notification_Proxy_Wtr.sendCommand("START")
+    	} else { 
+    		logInfo( "FILE", "Watering_manual_start/stop: Stoping  watering, manual activation")
+    		logInfo("User pressed button STOP watering")
+    		Notification_Proxy_Wtr.sendCommand("STOP")
+    	}    
+end

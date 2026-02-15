@@ -1,0 +1,16 @@
+rule "5 - Josh leaves home"
+when
+    Item phone_Josh received update OFF
+then
+    postUpdate(josh, "Away")
+
+end
+
+rule "7 - Josh leaves work in Afternoon"
+when
+    Item phone_Josh_Work received update OFF
+then
+    if(josh.state=="Away")
+        postUpdate(josh, "Away")
+
+end

@@ -1,0 +1,61 @@
+FILE: C:\Users\jason\OneDrive\Documents\TMU\CPS40A\IoT-Mutator-Noura\IoT-Mutator-Noura\Mutation_Output\Rules\Mutated\SAC\SAC_irrigation_2_4_5.rules
+------------------------------------------------
+THREATS DETECTED: 2
+SAC: 2
+WAC: 0
+STC: 0
+WTC: 0
+SCC: 0
+WCC: 0
+------------------------------------------------
+UNCOMMENTED ACTION-ITEM DISCREPANCIES: 3 -- (rules, prolog)
+irrigationcurrentvalve: (1, 0)
+currvalve: (3, 0)
+irrigationsectionremainingtime: (2, 0)
+------------------------------------------------
+1. SAC THREAT DETECTED
+    THREAT PAIR: (r1a2, r2a2)
+    
+    RULES:
+        RULE_A [r1]: ("3 - Irrigation - cascading")
+        RULE_B [r2]: ("5 - Irrigation - all valves closed")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: Item irrigationcurrentvalve received command 
+        
+        TRIGGERS_B:     [r2t1]: Item groupirrigationvalves changed to off
+    
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r1a2]: irrigationsectionremainingtime.postUpdate(valveopentime.intvalue)
+        ACTION_B:       [r2a2]: irrigationsectionremainingtime.postUpdate(0)
+    
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+2. SAC THREAT DETECTED
+    THREAT PAIR: (r1a4, r2a1)
+    
+    RULES:
+        RULE_A [r1]: ("3 - Irrigation - cascading")
+        RULE_B [r2]: ("5 - Irrigation - all valves closed")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: Item irrigationcurrentvalve received command 
+        
+        TRIGGERS_B:     [r2t1]: Item groupirrigationvalves changed to off
+    
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r1a4]: currvalve.sendCommand(off)
+        ACTION_B:       [r2a1]: currvalve.postUpdate(on)
+    
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+

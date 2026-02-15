@@ -1,0 +1,48 @@
+FILE: C:\Users\jason\OneDrive\Documents\TMU\CPS40A\IoT-Mutator-Noura\IoT-Mutator-Noura\Mutation_Output\Rules\Mutated\SAC\SAC_irrigation_4_0_1.rules
+------------------------------------------------
+THREATS DETECTED: 1
+SAC: 1
+WAC: 0
+STC: 0
+WTC: 0
+SCC: 0
+WCC: 0
+------------------------------------------------
+UNCOMMENTED ACTION-ITEM DISCREPANCIES: 13 -- (rules, prolog)
+irrigationcurrentvalve: (2, 0)
+irrigationvalvezone2time: (1, 0)
+irrigationhoursbeforesunrise: (2, 0)
+irrigationvalvezone3time: (1, 0)
+sumrainnext24h: (1, 0)
+irrigationstartatspecifichour: (1, 0)
+irrigationvalvezone4time: (1, 0)
+irrigationstarttime: (1, 0)
+maxallowedrain: (1, 0)
+irrigationvalvezone1time: (1, 0)
+maxallowedwindspeed: (1, 0)
+irrigationsectionremainingtime: (1, 0)
+sumrainlast24h: (1, 0)
+------------------------------------------------
+1. SAC THREAT DETECTED
+    THREAT PAIR: (r1a1, r2a13)
+    
+    RULES:
+        RULE_A [r1]: ("5 - Irrigation - all valves closed")
+        RULE_B [r2]: ("1 Irrigation - system start")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: Item groupirrigationvalves changed to off 
+        
+        TRIGGERS_B:     [r2t1]: System started
+    
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r1a1]: irrigationcurrentvalve.postUpdate(off)
+        ACTION_B:       [r2a13]: irrigationcurrentvalve.postUpdate(on)
+    
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+

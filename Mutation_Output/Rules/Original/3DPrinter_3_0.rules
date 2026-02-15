@@ -1,0 +1,24 @@
+rule "3 POST System Command"
+when
+	Item OctoprintSystemCommand received update
+then
+    var url = 'http:
+    
+
+    var output = sendHttpPostRequest(url)
+    
+    logInfo("Test Octoprint:", output);
+end
+
+rule "0 Time Printed String"
+when
+	Item OctoprintJobPrintTime changed
+then
+    val seconds = (OctoprintJobPrintTime.state as DecimalType).intValue
+    val int totalMinutes = seconds/60
+    val int remainderSecs = seconds%60
+    val int totalHours = totalMinutes/60
+    val int remainderMins = totalMinutes%60
+    val formattedTime = String::format("%02d", totalHours) + ":" + String::format("%02d", remainderMins) + ":" + String::format("%02d", remainderSecs)
+    OctoprintJobPrintTimeString.postUpdate(formattedTime)
+end

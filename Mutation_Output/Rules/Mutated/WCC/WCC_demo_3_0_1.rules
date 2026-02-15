@@ -1,0 +1,37 @@
+rule "8 - Set daily max and min temperature"
+when
+    Item Weather_Temperature changed or
+    Time cron "0 0 0 * * ?" or
+    System started
+then
+    if (max !== null && min !== null)
+        {
+            postUpdate(Weather_Temp_Max, max.state)
+            postUpdate(Weather_Temp_Min, min.state)
+        }
+
+end
+
+rule "1 - Dimmed Light"
+when
+    Item DimmedLight received command
+then
+    if ((receivedCommand == INCREASE) || (receivedCommand == DECREASE))
+        {
+            var Number percent = 0
+            if (DimmedLight.state instanceof DecimalType)
+                percent = DimmedLight.state as DecimalType
+            if (receivedCommand == INCREASE)
+                percent = percent + 5
+            if (receivedCommand == DECREASE)
+                percent = percent - 5
+            if (percent < 0)
+                percent = 0
+            if (percent > 100)
+                percent = 100
+            if (Weather_Temp_Max.state == max.state)
+                postUpdate(DimmedLight, percent);
+        }
+    var Number percent = 0
+
+end

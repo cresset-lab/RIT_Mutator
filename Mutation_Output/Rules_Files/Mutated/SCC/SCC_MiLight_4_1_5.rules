@@ -1,0 +1,74 @@
+
+
+
+
+rule "1 - Milight_ID1_G1_ONOFF"
+  when
+	Item Milight_ID1_G1_State received command
+  then
+	Milight_ID1_G1_Light.sendCommand('{"state":"'+receivedCommand+'"}')
+end
+
+rule "2 - Milight_ID1_G1_BRIGHT"
+when
+    Item Milight_ID1_G1_Brightness received command
+then
+    var iLEVEL = (receivedCommand as PercentType).intValue
+    if (Milight_ID1_G1_State.state == OFF)
+        Milight_ID1_G1_State.postUpdate(ON)
+    if (Milight_ID1_G1_Hue.state == sHUE + "," + sSATURATION + "," + sLEVEL)
+        Milight_ID1_G1_Light.sendCommand('{"state":"ON","level":' + iLEVEL + '}')
+
+end
+
+rule "3 - Milight_ID1_G1_CT"
+  when
+	Item Milight_ID1_G1_CTemp received command
+  then
+	var iVAL = (receivedCommand as DecimalType).intValue
+	var iCTEMP = (370-(2.17*iVAL)).intValue 
+	
+	if(Milight_ID1_G1_State.state==OFF) 
+		Milight_ID1_G1_State.postUpdate(ON)
+
+    Milight_ID1_G1_Light.sendCommand('{"state":"ON","color_temp":'+iCTEMP+'}')
+end
+
+rule "4 - Milight_ID1_G1_HUE"
+  when
+	Item Milight_ID1_G1_Hue received command
+  then
+	var iHUE 	= Math::round((receivedCommand as HSBType).getHue.intValue)
+	var iSAT 	= Math::round((receivedCommand as HSBType).getSaturation.intValue)
+	var iLEVEL 	= Math::round((receivedCommand as HSBType).getBrightness.intValue)
+	Milight_ID1_G1_Light.sendCommand('{"state":"ON","level":'+iLEVEL+',"hue":'+iHUE+',"saturation":'+iSAT+'}')
+end
+
+rule "5 - Milight_ID1_G1_HubStates"
+when
+    Item Milight_ID1_G1_EspMilightHub changed
+then
+    var sJSONBLOB = Milight_ID1_G1_EspMilightHub.state.toString
+    var sMODE = transform("JSONPATH", "$.bulb_mode", sJSONBLOB)
+    var sSTATE = transform("JSONPATH", "$.state", sJSONBLOB)
+    var sLEVEL = transform("JSONPATH", "$.level", sJSONBLOB)
+    var Number iLEVEL = Integer :: parseInt(sLEVEL).intValue
+    if (Milight_ID1_G1_State.state != sSTATE)
+        Milight_ID1_G1_State.postUpdate(sSTATE)
+    if (sMODE == "white")
+        {
+            var sCTEMP = transform("JSONPATH", "$.color_temp", sJSONBLOB)
+            var iTempScaled = (((Integer :: parseInt(sCTEMP) / 2.17) - 171) * - 1).intValue
+            Milight_ID1_G1_CTemp.postUpdate(iTempScaled)
+            Milight_ID1_G1_Brightness.postUpdate(iLEVEL)
+        }
+    else if (sMODE == "color")
+        {
+            var String sHUE = transform("JSONPATH", "$.hue", sJSONBLOB)
+            var String sSATURATION = transform("JSONPATH", "$.saturation", sJSONBLOB)
+            Milight_ID1_G1_Brightness.postUpdate(iLEVEL)
+            Milight_ID1_G1_Hue.postUpdate(sHUE + "," + sSATURATION + "," + sLEVEL)
+        }
+
+end
+

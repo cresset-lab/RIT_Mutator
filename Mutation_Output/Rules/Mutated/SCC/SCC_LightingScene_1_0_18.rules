@@ -1,0 +1,24 @@
+rule "Lighting Scene Evening"
+when
+    Item Scene_Evening received command ON
+then
+    EveningLights.sendCommand(ON)
+    LEDStrip_Group2_Power.sendCommand(Scene_Evening_Kitchen_Strip_Power.state as OnOffType)
+    LEDStrip_Group2_Color.sendCommand(Scene_Evening_Kitchen_Strip_Color.state as HSBType)
+    FF_Kitchen_Recessed.sendCommand(Scene_Evening_Light_FF_Kitchen_Recessed.state as DecimalType)
+    Light_FF_Kitchen_Sink.sendCommand(Scene_Evening_Light_FF_Kitchen_Sink.state as DecimalType)
+    Scene_Evening.postUpdate(OFF)
+
+end
+
+rule "Lighting Scene Wakeup"
+when
+    Item Scene_Wakeup received command ON
+then
+    Light_FF_Kitchen_Sink.sendCommand(25)
+    if (Light_FF_Kitchen_Sink.state == Scene_Evening_Light_FF_Kitchen_Sink.state as DecimalType)
+        FF_Kitchen_Island.sendCommand(25)
+    Light_SF_Landing_Lamp.sendCommand(50)
+    Scene_Wakeup.postUpdate(OFF)
+
+end

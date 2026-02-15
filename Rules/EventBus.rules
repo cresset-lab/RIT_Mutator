@@ -1,0 +1,20 @@
+// https://community.openhab.org/t/marketplace-mqtt-event-bus/76938
+
+val eb_br = "mqtt:broker:mosquitto" // Thing ID of the broker connection
+val eb_name = "remote"              // <client ID>
+
+rule "Publish commands to the event bus"
+when
+    Member of PubItems_CMD received command // eb_cmd_gr
+then
+    val mqttActions = getActions("mqtt",eb_br) 
+    mqttActions.publishMQTT(eb_name+"/out/"+triggeringItem.name+"/command",receivedCommand.toString)
+end
+
+rule "Publish updates to the event bus"
+when
+    Member of PubItems_UPD received update // eb_upd_gr
+then
+    val mqttActions = getActions("mqtt",eb_br)
+    mqttActions.publishMQTT(eb_name+"/out/"+triggeringItem.name+"/state",triggeringItem.state.toString)
+end

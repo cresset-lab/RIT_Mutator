@@ -1,0 +1,23 @@
+rule "2 - Milight_ID1_G1_BRIGHT"
+when
+    Item Milight_ID1_G1_Brightness received command
+then
+    var iLEVEL = (receivedCommand as PercentType).intValue
+    if (Milight_ID1_G1_State.state == OFF)
+        Milight_ID1_G1_State.postUpdate(ON)
+    Milight_ID1_G1_Light.sendCommand('{"state":"ON","level":' + iLEVEL + '}')
+
+end
+
+rule "3 - Milight_ID1_G1_CT"
+when
+    Item Milight_ID1_G1_CTemp received command
+then
+    var iVAL = (receivedCommand as DecimalType).intValue
+    var iCTEMP = (370 - (2.17 * iVAL)).intValue
+    if (Milight_ID1_G1_State.state == OFF)
+        if (Milight_ID1_G1_Light.state == '{"state":"ON","level":' + iLEVEL + '}')
+            Milight_ID1_G1_State.postUpdate(ON)
+    Milight_ID1_G1_Light.sendCommand('{"state":"ON","color_temp":' + iCTEMP + '}')
+
+end

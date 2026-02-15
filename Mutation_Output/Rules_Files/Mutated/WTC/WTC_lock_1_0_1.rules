@@ -1,0 +1,24 @@
+
+
+rule "unlock door in foyer"
+when
+    Item Hallway_Light changed
+then
+    if (now.getHourOfDay >= 7 && now.getHourOfDay <= 21)
+        {
+            Front_Door_Lock.postUpdate(ON)
+        }
+
+end
+
+rule "turn off hallway light"
+when
+    Item Foyer_Light changed to OFF
+then
+    if (now.getHourOfDay >= 19)
+        {
+            Hallway_Light.sendCommand(OFF)
+        }
+
+end
+

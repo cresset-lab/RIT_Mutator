@@ -1,0 +1,72 @@
+FILE: C:\Users\jason\OneDrive\Documents\TMU\CPS40A\IoT-Mutator-Noura\IoT-Mutator-Noura\Mutation_Output\Rules\Mutated\WAC\WAC_LightColor_1_0_2.rules
+------------------------------------------------
+THREATS DETECTED: 2
+SAC: 0
+WAC: 1
+STC: 1
+WTC: 0
+SCC: 0
+WCC: 0
+------------------------------------------------
+UNCOMMENTED ACTION-ITEM DISCREPANCIES: 4 -- (rules, prolog)
+lamp_colorrgbcwstring: (1, 0)
+lamp_wwdimmer: (1, 0)
+lamp_colorhsb: (1, 0)
+lamp_power: (3, 0)
+------------------------------------------------
+1. WAC THREAT DETECTED
+    THREAT PAIR: (r1a1, r2a2)
+    
+    RULES:
+        RULE_A [r1]: ("HSB+CW -> RGBCW")
+        RULE_B [r2]: ("RGBCW -> HSB+CW")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: Item lamp_colorhsb received command
+                    OR  [r1t2]: Item lamp_cwdimmer received command
+                    OR  [r1t3]: Item lamp_wwdimmer received command 
+        
+        TRIGGERS_B:     [r2t1]: Item lamp_colorrgbcwstring received update
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [r1c1]: if (receivedcommand instanceof onofftype)
+                    AND [r1c2]: if (receivedcommand == on) 
+        
+        CONDITIONS_B:   [c0]:   no conditions guarding action
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r1a1]: lamp_power.sendCommand(on)
+        ACTION_B:       [r2a2]: lamp_power.postUpdate(off)
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+2. STC THREAT DETECTED
+    THREAT PAIR: (r1a3, r2t1)
+
+    RULES:
+        RULE_A [r1]: ("HSB+CW -> RGBCW")
+        RULE_B [r2]: ("RGBCW -> HSB+CW")
+
+    TRIGGER-ACTION PAIR (ACTION_A --> TRIGGER_B):
+        ACTION_A:       [r1a3]: lamp_colorrgbcwstring.sendCommand(rgbcw)
+        TRIGGER_B:      [r2t1]: Item lamp_colorrgbcwstring received update
+        
+    RESULTANT TRIGGER CASCADE (TRIGGER_A --> ACTION_B):
+        TRIGGERS_A:     [r1t1]: Item lamp_colorhsb received command
+                    OR  [r1t2]: Item lamp_cwdimmer received command
+                    OR  [r1t3]: Item lamp_wwdimmer received command
+        ACTION_B:       [r2a1]: lamp_colorhsb.postUpdate(hsb)
+    
+
+    THREAT DESCRIPTION:
+    WHEN INITIAL TRIGGER IS ACTIVATED
+    THE TRIGGER-ACTION PAIR CAUSES 
+    A CHAIN OF ACTION EXECUTIONS.
+
+------------------------------------------------
+

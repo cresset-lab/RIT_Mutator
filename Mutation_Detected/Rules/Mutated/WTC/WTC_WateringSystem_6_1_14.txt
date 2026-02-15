@@ -1,0 +1,121 @@
+FILE: C:\Users\jason\OneDrive\Documents\TMU\CPS40A\IoT-Mutator-Noura\IoT-Mutator-Noura\Mutation_Output\Rules\Mutated\WTC\WTC_WateringSystem_6_1_14.rules
+------------------------------------------------
+THREATS DETECTED: 4
+SAC: 0
+WAC: 0
+STC: 2
+WTC: 2
+SCC: 0
+WCC: 0
+------------------------------------------------
+UNCOMMENTED ACTION-ITEM DISCREPANCIES: 6 -- (rules, prolog)
+wtrvalveline: (3, 0)
+wtrvalveback: (3, 0)
+wtrvalvefront: (3, 0)
+wtrled: (3, 0)
+notification_proxy_wtr: (1, 0)
+wtrlastdate: (1, 0)
+------------------------------------------------
+1. STC THREAT DETECTED
+    THREAT PAIR: (r1a2, r2t2)
+
+    RULES:
+        RULE_A [r1]: ("7 Watering_starting/stoping")
+        RULE_B [r2]: ("2 Rain_sensor_rain_activated")
+
+    TRIGGER-ACTION PAIR (ACTION_A --> TRIGGER_B):
+        ACTION_A:       [r1a2]: wtrvalveback.sendCommand(off_r)
+        TRIGGER_B:      [r2t2]: Item wtrvalveback changed
+        
+    RESULTANT TRIGGER CASCADE (TRIGGER_A --> ACTION_B):
+        TRIGGERS_A:     [r1t1]: Item notification_proxy_wtr received update
+        ACTION_B:       [r2a1]: notification_proxy_wtr.sendCommand("STOP")
+    
+
+    THREAT DESCRIPTION:
+    WHEN INITIAL TRIGGER IS ACTIVATED
+    THE TRIGGER-ACTION PAIR CAUSES 
+    A CHAIN OF ACTION EXECUTIONS.
+
+------------------------------------------------
+
+2. STC THREAT DETECTED
+    THREAT PAIR: (r2a1, r1t1)
+
+    RULES:
+        RULE_A [r2]: ("2 Rain_sensor_rain_activated")
+        RULE_B [r1]: ("7 Watering_starting/stoping")
+
+    TRIGGER-ACTION PAIR (ACTION_A --> TRIGGER_B):
+        ACTION_A:       [r2a1]: notification_proxy_wtr.sendCommand("STOP")
+        TRIGGER_B:      [r1t1]: Item notification_proxy_wtr received update
+        
+    RESULTANT TRIGGER CASCADE (TRIGGER_A --> ACTION_B):
+        TRIGGERS_A:     [r2t1]: Item rainsensor changed to open
+                    OR  [r2t2]: Item wtrvalveback changed
+        ACTION_B:       [r1a1]: wtrvalvefront.sendCommand(off_r)
+    
+
+    THREAT DESCRIPTION:
+    WHEN INITIAL TRIGGER IS ACTIVATED
+    THE TRIGGER-ACTION PAIR CAUSES 
+    A CHAIN OF ACTION EXECUTIONS.
+
+------------------------------------------------
+
+3. WTC THREAT DETECTED
+    THREAT PAIR: (r1a9, r2t2)
+
+    RULES:
+        RULE_A:         [r1]: ("7 Watering_starting/stoping")
+        RULE_B:         [r2]: ("2 Rain_sensor_rain_activated")
+
+    TRIGGER-ACTION PAIR (ACTION_A --> TRIGGER_B):
+        ACTION_A:       [r1a9]: wtrvalveback.sendCommand(on_r)
+        TRIGGER_B:      [r2t2]: Item wtrvalveback changed
+
+    OVERLAPPING GUARDING CONDITIONS:
+        CONDITIONS_A:   [r1c8]: if (msg == "START")
+                    AND [r1c10]: if (wtrbacktime > 0) 
+        
+        CONDITIONS_B:   [c0]:   no conditions guarding action
+
+    RESULTANT TRIGGER CASCADE (TRIGGER_A --> ACTION_B):
+        TRIGGERS_A:     [r1t1]: Item notification_proxy_wtr received update
+        ACTION_B:       [r2a1]: notification_proxy_wtr.sendCommand("STOP")
+
+    THREAT DESCRIPTION:
+    WHEN INITIAL TRIGGER IS ACTIVATED
+    IF OVERLAPPING SETS OF CONDITIONS ARE CONCURRENTLY ENABLED
+    THE TRIGGER-ACTION PAIR CAUSES A CHAIN OF ACTION EXECUTIONS.
+
+------------------------------------------------
+
+4. WTC THREAT DETECTED
+    THREAT PAIR: (r1a10, r2t2)
+
+    RULES:
+        RULE_A:         [r1]: ("7 Watering_starting/stoping")
+        RULE_B:         [r2]: ("2 Rain_sensor_rain_activated")
+
+    TRIGGER-ACTION PAIR (ACTION_A --> TRIGGER_B):
+        ACTION_A:       [r1a10]: wtrvalveback.sendCommand(off_r)
+        TRIGGER_B:      [r2t2]: Item wtrvalveback changed
+
+    OVERLAPPING GUARDING CONDITIONS:
+        CONDITIONS_A:   [r1c8]: if (msg == "START")
+                    AND [r1c10]: if (wtrbacktime > 0) 
+        
+        CONDITIONS_B:   [c0]:   no conditions guarding action
+
+    RESULTANT TRIGGER CASCADE (TRIGGER_A --> ACTION_B):
+        TRIGGERS_A:     [r1t1]: Item notification_proxy_wtr received update
+        ACTION_B:       [r2a1]: notification_proxy_wtr.sendCommand("STOP")
+
+    THREAT DESCRIPTION:
+    WHEN INITIAL TRIGGER IS ACTIVATED
+    IF OVERLAPPING SETS OF CONDITIONS ARE CONCURRENTLY ENABLED
+    THE TRIGGER-ACTION PAIR CAUSES A CHAIN OF ACTION EXECUTIONS.
+
+------------------------------------------------
+

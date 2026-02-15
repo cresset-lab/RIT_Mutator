@@ -1,0 +1,74 @@
+FILE: C:\Users\jason\OneDrive\Documents\TMU\CPS40A\IoT-Mutator-Noura\IoT-Mutator-Noura\Mutation_Output\Rules\Mutated\SCC\SCC_OwnTracks_2_6_3.rules
+------------------------------------------------
+THREATS DETECTED: 2
+SAC: 0
+WAC: 1
+STC: 0
+WTC: 0
+SCC: 1
+WCC: 0
+------------------------------------------------
+UNCOMMENTED ACTION-ITEM DISCREPANCIES: 1 -- (rules, prolog)
+josh: (4, 0)
+------------------------------------------------
+1. WAC THREAT DETECTED
+    THREAT PAIR: (r1a1, r2a1)
+    
+    RULES:
+        RULE_A [r1]: ("3 - System Start")
+        RULE_B [r2]: ("7 - Josh leaves work in Afternoon")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: System started 
+        
+        TRIGGERS_B:     [r2t1]: Item phone_josh_work received update off
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [r1c1]: if (phone_josh == on) 
+        
+        CONDITIONS_B:   [r2c1]: if (josh == "Away")
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r1a1]: josh.postUpdate("Home")
+        ACTION_B:       [r2a1]: josh.postUpdate("Away")
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+2. SCC THREAT DETECTED
+    THREAT PAIR: (r1a3, r2c1)
+
+    RULES:
+        RULE_A:         [r1]: ("3 - System Start")
+        RULE_B:         [r2]: ("7 - Josh leaves work in Afternoon")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: System started 
+        
+        TRIGGERS_B:     [r2t1]: Item phone_josh_work received update off
+
+    GUARDING CONDITIONS:
+        CONDITIONS_A:   [r1c2]: if (phone_josh != on)
+                    AND [r1c4]: if (phone_josh_work != on) 
+
+    CONDITION-ACTION PAIR:
+        ACTION_A:       [r1a3]: josh.postUpdate("Away") 
+
+        CONDITIONS_B:   [r2c1]: if (josh == "Away") 
+
+    RESULTING ACTION:
+        ACTION_B:       [r2a1]: josh.postUpdate("Away") 
+
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS ARE CONCURRENTLY ACTIVATED
+    WHILE GUARDING CONDITIONS ARE ENABLED
+    THE CONDITION-ACTION PAIR
+    WILL CAUSE A CHAIN OF ACTION EXECUTIONS.
+
+------------------------------------------------
+
